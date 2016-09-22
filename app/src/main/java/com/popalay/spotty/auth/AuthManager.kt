@@ -1,10 +1,14 @@
 package com.popalay.spotty.auth
 
 import android.content.Intent
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.UserProfileChangeRequest
 import com.kelvinapps.rxfirebase.RxFirebaseAuth
 import com.pawegio.kandroid.d
 import com.popalay.spotty.controllers.base.BaseController
+import com.popalay.spotty.models.User
 import rx.schedulers.Schedulers
 import java.util.*
 
@@ -35,11 +39,11 @@ class AuthManager(private val authProviderFactory: AuthProviderFactory) {
     }
 
     fun handleSignIn(requestCode: Int, resultCode: Int, data: Intent?) {
-        authProvider?.handleSignIn(requestCode, resultCode, data, firebaseAuth) {
-            it.addOnCompleteListener {
+        authProvider?.handleSignIn(requestCode, resultCode, data, firebaseAuth) { task: Task<AuthResult>, user: User ->
+            task.addOnCompleteListener {
                 d("handle signin")
                 if (it.isSuccessful) {
-                    authCompleted()
+                    authCompleted(user)
                 } else {
                     d("${it.exception?.message}")
                     authFailed()
@@ -75,16 +79,17 @@ class AuthManager(private val authProviderFactory: AuthProviderFactory) {
         authProvider?.signOut()
     }
 
-    private fun authCompleted() {
-        authListeners.forEach {
-            it.authCompleted()
-        }
+    private fun authCompleted(user: User) {
+        val profileUpdates = UserProfileChangeRequest.Builder()
+                .setDisplayName(user.displayName)
+                .setPhotoUri(user.profilePhoto)
+                .build()
+        firebaseAuth.currentUser?.updateProfile(profileUpdates)
+        authListeners.forEach(AuthListener::authCompleted)
     }
 
     private fun authFailed() {
-        authListeners.forEach {
-            it.authFailed()
-        }
+        authListeners.forEach(AuthListener::authFailed)
     }
 
 }

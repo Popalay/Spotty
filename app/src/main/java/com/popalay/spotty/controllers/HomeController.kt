@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.HorizontalChangeHandler
+import com.google.firebase.auth.FirebaseAuth
 import com.popalay.spotty.App
 import com.popalay.spotty.R
 import com.popalay.spotty.auth.AuthManager
@@ -32,6 +33,10 @@ class HomeController : BaseController() {
 
     private fun initUI() {
         setSupportActionBar(view.toolbar)
+        FirebaseAuth.getInstance().currentUser?.let {
+            view.display_name.text = it.displayName
+            view.profile_photo.text = it.photoUrl?.path
+        }
         view.btn_exit.setOnClickListener {
             signOut()
         }

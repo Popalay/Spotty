@@ -12,6 +12,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.popalay.spotty.R
 import com.popalay.spotty.controllers.base.SupportController
+import com.popalay.spotty.models.User
 
 class GoogleAuthProvider(val context: Context) : AuthProvider, GoogleApiClient.OnConnectionFailedListener {
 
@@ -29,12 +30,15 @@ class GoogleAuthProvider(val context: Context) : AuthProvider, GoogleApiClient.O
     }
 
     override fun handleSignIn(requestCode: Int, resultCode: Int, data: Intent?,
-                              firebaseAuth: FirebaseAuth, result: (Task<AuthResult>) -> Unit) {
+                              firebaseAuth: FirebaseAuth, result: (Task<AuthResult>, User) -> Unit) {
         if (requestCode == GOOGLE_RC_SIGN_IN) {
             val signInResult = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
             val account = signInResult.signInAccount
-            val credential = GoogleAuthProvider.getCredential(account?.idToken, null)
-            result(firebaseAuth.signInWithCredential(credential))
+            account?.let {
+                val credential = GoogleAuthProvider.getCredential(account.idToken, null)
+                result(firebaseAuth.signInWithCredential(credential),
+                        User(account.displayName, account.photoUrl))
+            }
         }
     }
 
