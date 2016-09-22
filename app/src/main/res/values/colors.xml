@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">#009688</color>
+    <color name="primaryDark">#00796B</color>
+    <color name="accent">#0288D1</color>
+    <color name="windowBackground">#f0f0f0</color>
+
+    <color name="vk">#4C75A3</color>
+    <color name="google">#D34836</color>
+</resources>

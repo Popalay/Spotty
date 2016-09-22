@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primaryDark"
+    android:gravity="bottom"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:src="@drawable/spotty_logo" />
+
+    <LinearLayout
+        android:id="@+id/buttons_box"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="bottom"
+        android:layout_weight="0"
+        android:background="@color/windowBackground"
+        android:elevation="@dimen/default_elevation"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingEnd="@dimen/large"
+        android:paddingStart="@dimen/large"
+        tools:layout_height="220dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/choose_start_method"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+
+        <Button
+            android:id="@+id/btn_vk"
+            style="@style/Base.Widget.AppCompat.Button.Colored"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/small"
+            android:backgroundTint="@color/vk"
+            android:drawableStart="@drawable/vk"
+            android:padding="@dimen/normal"
+            android:text="@string/start_via_vk"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large.Inverse" />
+
+        <Button
+            android:id="@+id/btn_google"
+            style="@style/Base.Widget.AppCompat.Button.Colored"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/google"
+            android:drawableStart="@drawable/google"
+            android:padding="@dimen/normal"
+            android:text="@string/start_via_google"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large.Inverse" />
+
+    </LinearLayout>
+
+</LinearLayout>

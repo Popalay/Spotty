@@ -1,0 +1,50 @@
+{
+  "project_info": {
+    "project_number": "348647900207",
+    "firebase_url": "https://spotty-fa3c5.firebaseio.com",
+    "project_id": "spotty-fa3c5",
+    "storage_bucket": "spotty-fa3c5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:348647900207:android:e0204b753bdb47ba",
+        "android_client_info": {
+          "package_name": "com.popalay.spotty"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "348647900207-co0pb5ri5tdoopm3qe9qulj7l788vbcf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.popalay.spotty",
+            "certificate_hash": "4A70B563E714F2ECA682372BC944952F651C5A37"
+          }
+        },
+        {
+          "client_id": "348647900207-6s5boo8k6718ck37t7ie2f2re50gaf85.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAF-ZxmpDy_kq0h0WlZfGh6mohYAhslrFs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
