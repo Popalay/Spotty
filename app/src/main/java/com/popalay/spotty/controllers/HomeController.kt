@@ -1,5 +1,6 @@
 package com.popalay.spotty.controllers
 
+import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,12 +10,12 @@ import com.google.firebase.auth.FirebaseAuth
 import com.popalay.spotty.App
 import com.popalay.spotty.R
 import com.popalay.spotty.auth.AuthManager
-import com.popalay.spotty.controllers.base.BaseController
+import com.popalay.spotty.controllers.base.DrawerController
 import com.popalay.spotty.extensions.inflate
 import kotlinx.android.synthetic.main.controller_home.view.*
 import javax.inject.Inject
 
-class HomeController : BaseController() {
+class HomeController : DrawerController() {
 
     @Inject lateinit var authManager: dagger.Lazy<AuthManager>
 
@@ -28,8 +29,10 @@ class HomeController : BaseController() {
 
     override fun onAttach(view: View) {
         super.onAttach(view)
-        initUI()
+        //initUI()
     }
+
+    override fun provideToolbar(): Toolbar = view.toolbar
 
     private fun initUI() {
         setSupportActionBar(view.toolbar)
