@@ -38,5 +38,4 @@ abstract class BaseController(args: Bundle?) : SupportController(args) {
     protected fun showSnackbar(message: Int) {
         snackbar(getBaseActivity().coordinator, message).show()
     }
-
 }

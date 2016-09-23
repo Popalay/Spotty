@@ -6,4 +6,7 @@
     <dimen name="large">32dp</dimen>
 
     <dimen name="default_elevation">8dp</dimen>
+
+    <dimen name="material_drawer_sticky_footer_elevation">0dp</dimen>
+
 </resources>

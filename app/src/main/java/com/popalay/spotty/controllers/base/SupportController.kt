@@ -20,8 +20,12 @@ abstract class SupportController(args: Bundle?) : RxController(args) {
 
     }
 
-    protected fun setSupportActionBar(toolbar:Toolbar){
+    protected fun setSupportActionBar(toolbar: Toolbar) {
         getBaseActivity().setSupportActionBar(toolbar)
+    }
+
+    protected fun setTitle(title: String) {
+        getBaseActivity().supportActionBar?.title = title
     }
 }
 

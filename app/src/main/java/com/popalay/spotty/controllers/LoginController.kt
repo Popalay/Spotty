@@ -1,5 +1,6 @@
 package com.popalay.spotty.controllers
 
+import android.app.Activity
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
@@ -35,6 +36,11 @@ class LoginController : BaseController(), AuthManager.AuthListener {
         super.onAttach(view)
         initUI()
         expandButtonsBox()
+    }
+
+    override fun onActivityResumed(activity: Activity?) {
+        super.onActivityResumed(activity)
+        hideProgress()
     }
 
     private fun init() {

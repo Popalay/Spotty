@@ -3,6 +3,7 @@
     <string name="choose_start_method">Choose start method</string>
     <string name="start_via_vk">Start via Vk</string>
     <string name="start_via_google">Start via Google</string>
+    <string name="exit">Exit</string>
 
     <integer name="com_vk_sdk_AppId">5633880</integer>
 </resources>

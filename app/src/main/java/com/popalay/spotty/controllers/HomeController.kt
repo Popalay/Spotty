@@ -4,52 +4,42 @@ import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.bluelinelabs.conductor.RouterTransaction
-import com.bluelinelabs.conductor.changehandler.HorizontalChangeHandler
-import com.google.firebase.auth.FirebaseAuth
 import com.popalay.spotty.App
 import com.popalay.spotty.R
-import com.popalay.spotty.auth.AuthManager
+import com.popalay.spotty.controllers.base.BaseController
 import com.popalay.spotty.controllers.base.DrawerController
 import com.popalay.spotty.extensions.inflate
 import kotlinx.android.synthetic.main.controller_home.view.*
-import javax.inject.Inject
 
 class HomeController : DrawerController() {
-
-    @Inject lateinit var authManager: dagger.Lazy<AuthManager>
 
     init {
         App.sessionComponent.inject(this)
     }
 
     override fun inflateView(inflater: LayoutInflater, container: ViewGroup): View {
-        return container.inflate(R.layout.controller_home)
+        val view = container.inflate(R.layout.controller_home)
+        return view
     }
 
     override fun onAttach(view: View) {
         super.onAttach(view)
-        //initUI()
+        initUI()
     }
+
+    override fun getContainer(): ViewGroup = view.home_container
 
     override fun provideToolbar(): Toolbar = view.toolbar
 
     private fun initUI() {
-        setSupportActionBar(view.toolbar)
-        FirebaseAuth.getInstance().currentUser?.let {
-            view.display_name.text = it.displayName
-            view.profile_photo.text = it.photoUrl?.path
-        }
-        view.btn_exit.setOnClickListener {
-            signOut()
-        }
+        setTitle(activity.getString(R.string.app_name))
     }
 
-    private fun signOut() {
-        authManager.get().signOut()
-        router.replaceTopController(RouterTransaction.with(LoginController())
-                .popChangeHandler(HorizontalChangeHandler())
-                .pushChangeHandler(HorizontalChangeHandler()))
+    override fun getControllerByPosition(position: Long): BaseController {
+        return when (position.toInt()) {
+            -1 -> DashboardController()
+            else -> DashboardController()
+        }
     }
 
 }

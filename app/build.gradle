@@ -41,6 +41,19 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
+    productFlavors {
+        staging{
+            buildConfigField 'String', 'MAPS_API_KEY', '"AIzaSyA1I327Zc2JE6CyrsTV8I87w7dSOhTD7bs"'
+
+        }
+
+        production {
+            buildConfigField 'String', 'MAPS_API_KEY', '"AIzaSyA1I327Zc2JE6CyrsTV8I87w7dSOhTD7bs"'
+
+        }
+    }
+
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
