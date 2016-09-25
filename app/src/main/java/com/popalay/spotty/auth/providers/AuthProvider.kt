@@ -1,4 +1,4 @@
-package com.popalay.spotty.auth
+package com.popalay.spotty.auth.providers
 
 import android.content.Intent
 import com.google.android.gms.tasks.Task

@@ -7,6 +7,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.kelvinapps.rxfirebase.RxFirebaseAuth
 import com.pawegio.kandroid.d
+import com.popalay.spotty.auth.providers.AuthProvider
 import com.popalay.spotty.controllers.base.BaseController
 import com.popalay.spotty.models.User
 import rx.schedulers.Schedulers

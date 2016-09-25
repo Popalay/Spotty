@@ -2,6 +2,9 @@ package com.popalay.spotty.auth
 
 import android.content.Context
 import android.text.TextUtils
+import com.popalay.spotty.auth.providers.AuthProvider
+import com.popalay.spotty.auth.providers.GoogleAuthProvider
+import com.popalay.spotty.auth.providers.VkAuthProvider
 
 enum class ProviderName(var providerName: String) {
     GOOGLE("google.com"), VK("password");

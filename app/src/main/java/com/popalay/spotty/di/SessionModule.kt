@@ -2,7 +2,7 @@ package com.popalay.spotty.di
 
 import android.content.Context
 import com.popalay.spotty.auth.AuthManager
-import com.popalay.spotty.auth.AuthProvider
+import com.popalay.spotty.auth.providers.AuthProvider
 import com.popalay.spotty.auth.AuthProviderFactory
 import dagger.Module
 import dagger.Provides

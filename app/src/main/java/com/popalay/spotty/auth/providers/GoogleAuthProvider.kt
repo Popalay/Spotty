@@ -1,4 +1,4 @@
-package com.popalay.spotty.auth
+package com.popalay.spotty.auth.providers
 
 import android.content.Context
 import android.content.Intent

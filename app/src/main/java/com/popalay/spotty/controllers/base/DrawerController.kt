@@ -1,6 +1,7 @@
 package com.popalay.spotty.controllers.base
 
 import android.support.annotation.CallSuper
+import android.support.annotation.IdRes
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.widget.Toolbar
 import android.view.View
@@ -9,14 +10,15 @@ import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
 import com.bluelinelabs.conductor.changehandler.HorizontalChangeHandler
-import com.google.firebase.auth.FirebaseAuth
 import com.mikepenz.materialdrawer.Drawer
 import com.mikepenz.materialdrawer.DrawerBuilder
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
 import com.popalay.spotty.R
 import com.popalay.spotty.auth.AuthManager
+import com.popalay.spotty.controllers.DashboardController
 import com.popalay.spotty.controllers.LoginController
+import com.popalay.spotty.data.DataManager
 import com.popalay.spotty.extensions.loadImg
 import kotlinx.android.synthetic.main.footer_drawer.view.*
 import kotlinx.android.synthetic.main.header_drawer.view.*
@@ -25,6 +27,7 @@ import javax.inject.Inject
 abstract class DrawerController : BaseController(), Drawer.OnDrawerItemClickListener {
 
     @Inject lateinit var authManager: dagger.Lazy<AuthManager>
+    @Inject lateinit var dataManager: DataManager
 
     private lateinit var itemMap: PrimaryDrawerItem
     private lateinit var itemLikedSpots: PrimaryDrawerItem
@@ -37,18 +40,23 @@ abstract class DrawerController : BaseController(), Drawer.OnDrawerItemClickList
     @CallSuper
     override fun onAttach(view: View) {
         super.onAttach(view)
-        childRouter = getChildRouter(getContainer(), null).setPopsLastView(true)
         initUI()
     }
 
     private fun initUI() {
         setSupportActionBar(provideToolbar())
-        selectDefaultController()
+        setDefaultController()
         initDrawer()
     }
 
-    private fun selectDefaultController(){
-        setController(getControllerByPosition(DEFAULT_DRAWER_POSITION));
+    private fun setDefaultController() {
+        @IdRes val frameId = resources.getIdentifier("home_container", "id", activity.packageName)
+        val container = view.findViewById(frameId) as ViewGroup
+        childRouter = getChildRouter(container, null)
+        if (!childRouter.hasRootController()) {
+            childRouter.setRoot(RouterTransaction.with(DashboardController()))
+        }
+        childRouter.setPopsLastView(true)
     }
 
     private fun initDrawer() {
@@ -84,7 +92,7 @@ abstract class DrawerController : BaseController(), Drawer.OnDrawerItemClickList
     }
 
     private fun setUserInfo() {
-        FirebaseAuth.getInstance().currentUser?.let {
+        dataManager.getCurrentUser()?.let {
             drawer.header.display_name.text = it.displayName
             drawer.header.image_profile.loadImg(it.photoUrl?.toString())
         }
@@ -92,18 +100,23 @@ abstract class DrawerController : BaseController(), Drawer.OnDrawerItemClickList
 
     override fun onItemClick(view: View?, position: Int, drawerItem: IDrawerItem<*, *>?): Boolean {
         setController(getControllerByPosition(position.toLong()))
+        drawer.closeDrawer()
         return true
     }
 
-    fun setController(controller: BaseController){
-        if (!childRouter.hasRootController()) {
-            childRouter.setRoot(RouterTransaction.with(controller)
+    fun setController(controller: BaseController) {
+        if (childRouter.backstackSize > 0) {
+            childRouter.replaceTopController(RouterTransaction.with(controller)
+                    .pushChangeHandler(FadeChangeHandler())
+                    .popChangeHandler(FadeChangeHandler()))
+        } else {
+            childRouter.pushController(RouterTransaction.with(controller)
                     .pushChangeHandler(FadeChangeHandler())
                     .popChangeHandler(FadeChangeHandler()))
         }
     }
 
-    protected abstract fun getControllerByPosition(position: Long):BaseController
+    protected abstract fun getControllerByPosition(position: Long): BaseController
 
     protected abstract fun provideToolbar(): Toolbar
 

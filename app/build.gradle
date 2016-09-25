@@ -42,18 +42,6 @@ android {
         }
     }
 
-    productFlavors {
-        staging{
-            buildConfigField 'String', 'MAPS_API_KEY', '"AIzaSyA1I327Zc2JE6CyrsTV8I87w7dSOhTD7bs"'
-
-        }
-
-        production {
-            buildConfigField 'String', 'MAPS_API_KEY', '"AIzaSyA1I327Zc2JE6CyrsTV8I87w7dSOhTD7bs"'
-
-        }
-    }
-
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
@@ -102,6 +90,10 @@ dependencies {
 
     //auth
     compile 'com.vk:androidsdk:1.6.5'
+
+    //play services
+    compile "com.google.android.gms:play-services-places:9.4.0"
+    compile "com.google.android.gms:play-services-maps:9.4.0"
     compile 'com.google.android.gms:play-services-auth:9.4.0'
 
     //design

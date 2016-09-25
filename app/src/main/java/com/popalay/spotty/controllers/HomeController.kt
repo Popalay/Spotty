@@ -18,7 +18,7 @@ class HomeController : DrawerController() {
     }
 
     override fun inflateView(inflater: LayoutInflater, container: ViewGroup): View {
-        val view = container.inflate(R.layout.controller_home)
+        val view = container.inflate(R.layout.controller_home, false)
         return view
     }
 
@@ -40,6 +40,10 @@ class HomeController : DrawerController() {
             -1 -> DashboardController()
             else -> DashboardController()
         }
+    }
+
+    override fun handleBack(): Boolean {
+        return super.handleBack()
     }
 
 }

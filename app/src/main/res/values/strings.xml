@@ -6,4 +6,5 @@
     <string name="exit">Exit</string>
 
     <integer name="com_vk_sdk_AppId">5633880</integer>
+    <string name="maps_api_key">AIzaSyA1I327Zc2JE6CyrsTV8I87w7dSOhTD7bs</string>
 </resources>

@@ -29,7 +29,7 @@ class LoginController : BaseController(), AuthManager.AuthListener {
 
     override fun inflateView(inflater: LayoutInflater, container: ViewGroup): View {
         init()
-        return container.inflate(R.layout.controller_login)
+        return container.inflate(R.layout.controller_login, false)
     }
 
     override fun onAttach(view: View) {
