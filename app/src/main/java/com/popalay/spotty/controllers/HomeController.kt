@@ -11,7 +11,6 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
 import com.bluelinelabs.conductor.changehandler.HorizontalChangeHandler
 import com.mikepenz.materialdrawer.Drawer
-import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
 import com.popalay.spotty.App
 import com.popalay.spotty.R
@@ -20,8 +19,9 @@ import com.popalay.spotty.controllers.base.BaseController
 import com.popalay.spotty.data.DataManager
 import com.popalay.spotty.extensions.inflate
 import com.popalay.spotty.extensions.loadImg
-import kotlinx.android.synthetic.main.activity_main2.view.*
+import kotlinx.android.synthetic.main.content_home.view.*
 import kotlinx.android.synthetic.main.controller_home.view.*
+import kotlinx.android.synthetic.main.footer_drawer.view.*
 import kotlinx.android.synthetic.main.header_drawer.view.*
 import javax.inject.Inject
 
@@ -32,10 +32,6 @@ class HomeController : BaseController(), Drawer.OnDrawerItemClickListener {
     @Inject lateinit var authManager: dagger.Lazy<AuthManager>
     @Inject lateinit var dataManager: DataManager
 
-    private lateinit var itemMap: PrimaryDrawerItem
-    private lateinit var itemLikedSpots: PrimaryDrawerItem
-    private lateinit var itemMySpots: PrimaryDrawerItem
-    private lateinit var drawer: Drawer
     private lateinit var childRouter: Router
 
     private lateinit var toggle: ActionBarDrawerToggle
@@ -46,7 +42,7 @@ class HomeController : BaseController(), Drawer.OnDrawerItemClickListener {
     }
 
     override fun inflateView(inflater: LayoutInflater, container: ViewGroup): View {
-        val view = container.inflate(R.layout.activity_main2, false)
+        val view = container.inflate(R.layout.controller_home, false)
         return view
     }
 
@@ -78,7 +74,7 @@ class HomeController : BaseController(), Drawer.OnDrawerItemClickListener {
         getSupportActionBar()?.setDisplayHomeAsUpEnabled(true)
         toggle = ActionBarDrawerToggle(activity, view.drawer_layout, R.string.drawer_open, R.string.drawer_close)
         toggle.isDrawerIndicatorEnabled = true
-        view.drawer_layout.addDrawerListener(object:DrawerLayout.DrawerListener{
+        view.drawer_layout.addDrawerListener(object : DrawerLayout.DrawerListener {
             override fun onDrawerClosed(drawerView: View?) {
 
             }
@@ -96,49 +92,35 @@ class HomeController : BaseController(), Drawer.OnDrawerItemClickListener {
         })
         toggle.syncState()
 
-        /*itemMap = PrimaryDrawerItem().withName("Map").withIcon(R.drawable.ic_map)
-        itemLikedSpots = PrimaryDrawerItem().withName("Liked Spots").withIcon(R.drawable.ic_heart)
-        itemMySpots = PrimaryDrawerItem().withName("My Spots").withIcon(R.drawable.ic_my)
-        drawer = DrawerBuilder().withActivity(activity)
-                //.withToolbar(view.toolbar)
-                //.withActionBarDrawerToggle(true)
-                //.withActionBarDrawerToggleAnimated(true)
-                .withHeader(R.layout.header_drawer)
-                .addDrawerItems(itemMap, itemLikedSpots, itemMySpots)
-                .withOnDrawerItemClickListener(this)
-                .withStickyFooterDivider(false)
-                .withStickyFooter(R.layout.footer_drawer)
-                .withSelectedItem(DEFAULT_DRAWER_POSITION)
-                .build()
+        setUserInfo(view)
 
-        drawer.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-
-        setUserInfo()
-
-        drawer.stickyFooter.logout.setOnClickListener {
+        view.logout.setOnClickListener {
             signOut()
-        }*/
+        }
     }
 
     private fun signOut() {
         authManager.get().signOut()
-        drawer.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
         router.setRoot(RouterTransaction.with(LoginController())
                 .popChangeHandler(HorizontalChangeHandler())
                 .pushChangeHandler(HorizontalChangeHandler()))
     }
 
-    private fun setUserInfo() {
+    private fun setUserInfo(view: View) {
         dataManager.getCurrentUser()?.let {
-            drawer.header.display_name.text = it.displayName
-            drawer.header.image_profile.loadImg(it.photoUrl?.toString())
+            view.nav_view.getHeaderView(0).display_name.text = it.displayName
+            view.nav_view.getHeaderView(0).image_profile.loadImg(it.photoUrl?.toString())
         }
     }
 
     override fun onItemClick(view: View?, position: Int, drawerItem: IDrawerItem<*, *>?): Boolean {
         setController(getControllerByPosition(position.toLong()))
-        drawer.closeDrawer()
+        closeDrawer()
         return true
+    }
+
+    private fun closeDrawer() {
+        view.drawer_layout.closeDrawers()
     }
 
     fun setController(controller: BaseController) {
