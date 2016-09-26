@@ -27,9 +27,9 @@ class SplashController : BaseController() {
         return inflater.inflate(R.layout.controller_splash, container, false)
     }
 
-    override fun onAttach(view: View) {
-        super.onAttach(view)
-        Observable.interval(3000, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+    override fun onViewBound(view: View) {
+        super.onViewBound(view)
+        Observable.interval(1000, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
                 .compose(bindUntilEvent<Long>(ControllerEvent.DESTROY))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {

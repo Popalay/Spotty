@@ -1,21 +1,23 @@
 package com.popalay.spotty.controllers
 
-import android.app.Activity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException
 import com.google.android.gms.common.GooglePlayServicesRepairableException
 import com.google.android.gms.location.places.ui.PlacePicker
-import com.pawegio.kandroid.d
 import com.popalay.spotty.R
 import com.popalay.spotty.controllers.base.BaseController
 import com.popalay.spotty.extensions.inflate
-import kotlinx.android.synthetic.main.controller_dashboard.view.*
 
 
-class DashboardController : BaseController() {
+class DashboardController : BaseController {
 
+
+    private val MENU_ADD: Int = Menu.FIRST
+    private val MENU_SEARCH: Int = MENU_ADD + 1
+
+    constructor() : super() {
+        setHasOptionsMenu(true)
+    }
 
     override fun inflateView(inflater: LayoutInflater, container: ViewGroup): View {
         return container.inflate(R.layout.controller_dashboard, false)
@@ -23,39 +25,45 @@ class DashboardController : BaseController() {
 
     override fun onViewBound(view: View) {
         super.onViewBound(view)
-        d("sss")
+        initUI(view)
     }
 
-    override fun onAttach(view: View) {
-        super.onAttach(view)
-        initUI()
+    private fun initUI(view: View) {
+
     }
 
-    override fun onActivityStarted(activity: Activity?) {
-        super.onActivityStarted(activity)
-        d("started")
+    override fun onPrepareOptionsMenu(menu: Menu?) {
+        menu?.let {
+            it.clear()
+            it.add(0, MENU_ADD, Menu.NONE, "Add").setIcon(R.drawable.ic_add).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+            it.add(0, MENU_SEARCH, Menu.NONE, "Search").setIcon(R.drawable.ic_search).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+        }
     }
 
-    private fun initUI() {
-        d("initUI")
-        setTitle("hhh")
-        view.pick.setOnClickListener {
-            d("gghg")
-            // Construct an intent for the place picker
-            try {
-                val intentBuilder = PlacePicker.IntentBuilder()
-                val intent = intentBuilder.build(activity)
-                // Start the intent by requesting a result,
-                // identified by a request code.
-                startActivityForResult(intent, 101)
-                d("hgh")
-
-            } catch (e: GooglePlayServicesRepairableException) {
-                // ...
-            } catch (e: GooglePlayServicesNotAvailableException) {
-                // ...
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            MENU_ADD -> {
+                addSpot()
+                return true
             }
+            MENU_SEARCH -> {
+                return true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
 
+    private fun addSpot() {
+        try {
+            val intentBuilder = PlacePicker.IntentBuilder()
+            val intent = intentBuilder.build(parentController.activity)
+            // Start the intent by requesting a result,
+            // identified by a request code.
+            parentController.activity.startActivityForResult(intent, 101)
+        } catch (e: GooglePlayServicesRepairableException) {
+            // ...
+        } catch (e: GooglePlayServicesNotAvailableException) {
+            // ...
         }
     }
 

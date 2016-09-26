@@ -25,16 +25,20 @@ class LoginController : BaseController(), AuthManager.AuthListener {
 
     init {
         App.sessionComponent.inject(this)
+        authManager.addAuthListener(this)
     }
 
     override fun inflateView(inflater: LayoutInflater, container: ViewGroup): View {
-        init()
         return container.inflate(R.layout.controller_login, false)
+    }
+
+    override fun onViewBound(view: View) {
+        super.onViewBound(view)
+        initUI(view)
     }
 
     override fun onAttach(view: View) {
         super.onAttach(view)
-        initUI()
         expandButtonsBox()
     }
 
@@ -43,11 +47,7 @@ class LoginController : BaseController(), AuthManager.AuthListener {
         hideProgress()
     }
 
-    private fun init() {
-        authManager.addAuthListener(this)
-    }
-
-    private fun initUI() {
+    private fun initUI(view: View) {
         view.btn_google.setOnClickListener {
             showProgress()
             authManager.signIn(ProviderName.GOOGLE, this)
@@ -83,7 +83,7 @@ class LoginController : BaseController(), AuthManager.AuthListener {
     }
 
     private fun toHome() {
-        router.replaceTopController(RouterTransaction.with(HomeController())
+        router.setRoot(RouterTransaction.with(HomeController())
                 .pushChangeHandler(HorizontalChangeHandler())
                 .popChangeHandler(HorizontalChangeHandler()))
     }

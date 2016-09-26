@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/map"
+            android:icon="@drawable/ic_map"
+            android:title="Map" />
+        <item
+            android:id="@+id/liked_spots"
+            android:icon="@drawable/ic_heart"
+            android:title="Liked Spots" />
+        <item
+            android:id="@+id/my_spots"
+            android:icon="@drawable/ic_my"
+            android:title="My Spots" />
+    </group>
+
+</menu>

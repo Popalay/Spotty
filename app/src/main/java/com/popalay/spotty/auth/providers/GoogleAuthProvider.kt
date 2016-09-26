@@ -55,7 +55,7 @@ class GoogleAuthProvider(val context: Context) : AuthProvider, GoogleApiClient.O
     }
 
     override fun signOut() {
-        if (googleApiClient.isConnected) {
+        if (googleApiClient?.isConnected) {
             Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback { }
         }
     }
