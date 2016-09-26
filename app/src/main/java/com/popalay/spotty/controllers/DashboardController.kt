@@ -3,10 +3,10 @@ package com.popalay.spotty.controllers
 import android.location.Location
 import android.os.Bundle
 import android.view.*
+import com.bluelinelabs.conductor.RouterTransaction
+import com.bluelinelabs.conductor.changehandler.HorizontalChangeHandler
 import com.bluelinelabs.conductor.rxlifecycle.ControllerEvent
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException
-import com.google.android.gms.common.GooglePlayServicesRepairableException
-import com.google.android.gms.location.places.ui.PlacePicker
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapsInitializer
@@ -97,7 +97,7 @@ class DashboardController : BaseController {
 
     override fun onDestroy() {
         super.onDestroy()
-        view.map_view.onDestroy()
+//        view.map_view.onDestroy()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -129,17 +129,22 @@ class DashboardController : BaseController {
     }
 
     private fun addSpot() {
-        try {
-            val intentBuilder = PlacePicker.IntentBuilder()
-            val intent = intentBuilder.build(parentController.activity)
-            // Start the intent by requesting a result,
-            // identified by a request code.
-            parentController.activity.startActivityForResult(intent, 101)
-        } catch (e: GooglePlayServicesRepairableException) {
-            // ...
-        } catch (e: GooglePlayServicesNotAvailableException) {
-            // ...
-        }
+        parentController.childRouters[0].pushController(RouterTransaction.with(AddSpotController())
+                .popChangeHandler(HorizontalChangeHandler())
+                .pushChangeHandler(HorizontalChangeHandler()))
+
+
+        /* try {
+             val intentBuilder = PlacePicker.IntentBuilder()
+             val intent = intentBuilder.build(parentController.activity)
+             // Start the intent by requesting a result,
+             // identified by a request code.
+             parentController.activity.startActivityForResult(intent, 101)
+         } catch (e: GooglePlayServicesRepairableException) {
+             // ...
+         } catch (e: GooglePlayServicesNotAvailableException) {
+             // ...
+         }*/
     }
 
 }

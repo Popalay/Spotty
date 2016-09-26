@@ -65,6 +65,19 @@ class HomeController : BaseController(), Drawer.OnDrawerItemClickListener {
         }
     }
 
+    fun showArrow(){
+        toggle.isDrawerIndicatorEnabled = false
+        view.drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+        toggle.setToolbarNavigationClickListener {
+            childRouter.popToRoot()
+            hideArrow()
+        }
+    }
+
+    fun hideArrow(){
+        toggle.isDrawerIndicatorEnabled = true
+        view.drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return toggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
@@ -72,24 +85,10 @@ class HomeController : BaseController(), Drawer.OnDrawerItemClickListener {
 
     private fun initDrawer(view: View) {
         getSupportActionBar()?.setDisplayHomeAsUpEnabled(true)
-        toggle = ActionBarDrawerToggle(activity, view.drawer_layout, R.string.drawer_open, R.string.drawer_close)
+        getSupportActionBar()?.setDisplayShowHomeEnabled(true)
+        toggle = ActionBarDrawerToggle(activity, view.drawer_layout, view.toolbar, R.string.drawer_open, R.string.drawer_close)
         toggle.isDrawerIndicatorEnabled = true
-        view.drawer_layout.addDrawerListener(object : DrawerLayout.DrawerListener {
-            override fun onDrawerClosed(drawerView: View?) {
-
-            }
-
-            override fun onDrawerStateChanged(newState: Int) {
-            }
-
-            override fun onDrawerSlide(drawerView: View?, slideOffset: Float) {
-            }
-
-            override fun onDrawerOpened(drawerView: View?) {
-
-            }
-
-        })
+        view.drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
 
         setUserInfo(view)
