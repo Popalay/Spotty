@@ -1,14 +1,12 @@
-package com.popalay.spotty.controllers.base
+package com.popalay.spotty.mvp.base
 
-import android.os.Bundle
 import android.support.v7.widget.Toolbar
-import com.bluelinelabs.conductor.rxlifecycle.RxController
+import com.hannesdorfmann.mosby.mvp.MvpPresenter
+import com.hannesdorfmann.mosby.mvp.MvpView
+import com.hannesdorfmann.mosby.mvp.conductor.MvpController
 import com.popalay.spotty.activities.BaseActivity
 
-abstract class SupportController(args: Bundle?) : RxController(args) {
-
-    protected constructor() : this(null) {
-    }
+abstract class SupportController<V : MvpView, P : MvpPresenter<V>>() : MvpController<V, P>() {
 
     fun getBaseActivity(): BaseActivity {
         val activity = activity

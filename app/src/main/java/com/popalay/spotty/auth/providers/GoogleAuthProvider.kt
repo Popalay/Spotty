@@ -2,6 +2,7 @@ package com.popalay.spotty.auth.providers
 
 import android.content.Context
 import android.content.Intent
+import com.bluelinelabs.conductor.Controller
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.ConnectionResult
@@ -11,7 +12,6 @@ import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.popalay.spotty.R
-import com.popalay.spotty.controllers.base.SupportController
 import com.popalay.spotty.models.User
 
 class GoogleAuthProvider(val context: Context) : AuthProvider, GoogleApiClient.OnConnectionFailedListener {
@@ -48,7 +48,7 @@ class GoogleAuthProvider(val context: Context) : AuthProvider, GoogleApiClient.O
     }
 
 
-    override fun signIn(controller: SupportController) {
+    override fun signIn(controller: Controller) {
         val signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient)
         controller.startActivityForResult(signInIntent, GOOGLE_RC_SIGN_IN)
     }

@@ -1,16 +1,14 @@
-package com.popalay.spotty.controllers.base
+package com.popalay.spotty.mvp.base
 
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.hannesdorfmann.mosby.mvp.MvpPresenter
+import com.hannesdorfmann.mosby.mvp.MvpView
 import com.popalay.spotty.extensions.snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 
-abstract class BaseController(args: Bundle?) : SupportController(args) {
-
-    protected constructor() : this(null) {
-    }
+abstract class BaseController<V : MvpView, P : MvpPresenter<V>>() : SupportController<V, P>() {
 
     protected abstract fun inflateView(inflater: LayoutInflater, container: ViewGroup): View
 

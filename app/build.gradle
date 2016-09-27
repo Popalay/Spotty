@@ -69,6 +69,8 @@ dependencies {
     compile 'com.bluelinelabs:conductor:2.0.2'
     compile 'com.bluelinelabs:conductor-support:2.0.2'
     compile 'com.bluelinelabs:conductor-rxlifecycle:2.0.2'
+    compile 'com.hannesdorfmann.mosby:mvp-conductor:0.8.2'
+    compile 'com.hannesdorfmann.mosby:viewstate-conductor:0.8.2'
 
     //rx
     compile 'io.reactivex:rxjava:1.1.10'

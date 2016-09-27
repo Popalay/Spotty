@@ -1,11 +1,11 @@
-package com.popalay.spotty.controllers
+package com.popalay.spotty.mvp.home
 
-import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import com.bluelinelabs.conductor.Controller
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
@@ -15,23 +15,25 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
 import com.popalay.spotty.App
 import com.popalay.spotty.R
 import com.popalay.spotty.auth.AuthManager
-import com.popalay.spotty.controllers.base.BaseController
+import com.popalay.spotty.mvp.base.BaseController
 import com.popalay.spotty.data.DataManager
 import com.popalay.spotty.extensions.inflate
 import com.popalay.spotty.extensions.loadInCircle
+import com.popalay.spotty.mvp.dashboard.DashboardController
+import com.popalay.spotty.mvp.login.LoginController
+import dagger.Lazy
 import kotlinx.android.synthetic.main.content_home.view.*
 import kotlinx.android.synthetic.main.controller_home.view.*
 import kotlinx.android.synthetic.main.footer_drawer.view.*
 import kotlinx.android.synthetic.main.header_drawer.view.*
 import javax.inject.Inject
 
-class HomeController : BaseController(), Drawer.OnDrawerItemClickListener {
-
+class HomeController : BaseController<HomeView, HomePresenter>(), Drawer.OnDrawerItemClickListener {
     private val DEFAULT_DRAWER_POSITION = -1L
 
-    @Inject lateinit var authManager: dagger.Lazy<AuthManager>
-    @Inject lateinit var dataManager: DataManager
+    @Inject lateinit var authManager: Lazy<AuthManager>
 
+    @Inject lateinit var dataManager: DataManager
     private lateinit var childRouter: Router
 
     private lateinit var toggle: ActionBarDrawerToggle
@@ -51,6 +53,8 @@ class HomeController : BaseController(), Drawer.OnDrawerItemClickListener {
         initUI(view)
     }
 
+    override fun createPresenter() = HomePresenter()
+
     private fun initUI(view: View) {
         setSupportActionBar(view.toolbar)
         setTitle(activity.getString(R.string.app_name))
@@ -63,20 +67,6 @@ class HomeController : BaseController(), Drawer.OnDrawerItemClickListener {
         if (!childRouter.hasRootController()) {
             childRouter.setRoot(RouterTransaction.with(DashboardController()))
         }
-    }
-
-    fun showArrow(){
-        toggle.isDrawerIndicatorEnabled = false
-        view.drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-        toggle.setToolbarNavigationClickListener {
-            childRouter.popToRoot()
-            hideArrow()
-        }
-    }
-
-    fun hideArrow(){
-        toggle.isDrawerIndicatorEnabled = true
-        view.drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -122,7 +112,7 @@ class HomeController : BaseController(), Drawer.OnDrawerItemClickListener {
         view.drawer_layout.closeDrawers()
     }
 
-    fun setController(controller: BaseController) {
+    fun setController(controller: Controller) {
         if (childRouter.backstackSize > 0) {
             childRouter.replaceTopController(RouterTransaction.with(controller)
                     .pushChangeHandler(FadeChangeHandler())
@@ -134,7 +124,7 @@ class HomeController : BaseController(), Drawer.OnDrawerItemClickListener {
         }
     }
 
-    fun getControllerByPosition(position: Long): BaseController {
+    fun getControllerByPosition(position: Long): Controller {
         return when (position.toInt()) {
             -1 -> DashboardController()
             else -> DashboardController()

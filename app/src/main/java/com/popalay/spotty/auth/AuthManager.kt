@@ -1,6 +1,7 @@
 package com.popalay.spotty.auth
 
 import android.content.Intent
+import com.bluelinelabs.conductor.Controller
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
@@ -8,7 +9,6 @@ import com.google.firebase.auth.UserProfileChangeRequest
 import com.kelvinapps.rxfirebase.RxFirebaseAuth
 import com.pawegio.kandroid.d
 import com.popalay.spotty.auth.providers.AuthProvider
-import com.popalay.spotty.controllers.base.BaseController
 import com.popalay.spotty.models.User
 import rx.schedulers.Schedulers
 import java.util.*
@@ -53,7 +53,7 @@ class AuthManager(private val authProviderFactory: AuthProviderFactory) {
         }
     }
 
-    fun signIn(authProviderName: ProviderName, controller: BaseController) {
+    fun signIn(authProviderName: ProviderName, controller: Controller) {
         authProvider = authProviderFactory.getAuthProvider(authProviderName)
         if (authProvider == null) {
             authFailed()

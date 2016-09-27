@@ -3,11 +3,11 @@ package com.popalay.spotty.auth.providers
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import com.bluelinelabs.conductor.Controller
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.pawegio.kandroid.w
-import com.popalay.spotty.controllers.base.SupportController
 import com.popalay.spotty.models.User
 import com.vk.sdk.*
 import com.vk.sdk.api.*
@@ -52,7 +52,7 @@ class VkAuthProvider(context: Context) : AuthProvider {
         })
     }
 
-    override fun signIn(controller: SupportController) {
+    override fun signIn(controller: Controller) {
         val intent = Intent(controller.applicationContext, VKServiceActivity::class.java)
         intent.putExtra("arg1", VKServiceActivity.VKServiceType.Authorization.name)
         intent.putExtra("arg4", VKSdk.isCustomInitialize())

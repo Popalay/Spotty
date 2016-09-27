@@ -1,4 +1,4 @@
-package com.popalay.spotty.controllers
+package com.popalay.spotty.mvp.addspot
 
 import android.app.Activity
 import android.content.Intent
@@ -16,7 +16,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.pawegio.kandroid.d
 import com.popalay.spotty.App
 import com.popalay.spotty.R
-import com.popalay.spotty.controllers.base.BaseController
+import com.popalay.spotty.mvp.base.BaseController
 import com.popalay.spotty.data.DataManager
 import com.popalay.spotty.extensions.inflate
 import com.popalay.spotty.extensions.toPx
@@ -28,14 +28,14 @@ import kotlinx.android.synthetic.main.controller_add_spot.view.*
 import javax.inject.Inject
 
 
-class AddSpotController : BaseController() {
-
+class AddSpotController : BaseController<AddSpotView, AddSpotPresenter>() {
     private val REQUEST_PLACE_PICKER = 100
-    private val MENU_ACCEPT: Int = Menu.FIRST
 
+    private val MENU_ACCEPT: Int = Menu.FIRST
     @Inject lateinit var dataManager: DataManager
 
     private var mapView: MapView? = null
+
     private lateinit var selectedPlace: Place
 
     init {
@@ -60,6 +60,8 @@ class AddSpotController : BaseController() {
         (view as ElasticDragDismissFrameLayout).addListener(dragDismissListener)
         initUI(view)
     }
+
+    override fun createPresenter() = AddSpotPresenter()
 
     override fun onPrepareOptionsMenu(menu: Menu?) {
         menu?.let {

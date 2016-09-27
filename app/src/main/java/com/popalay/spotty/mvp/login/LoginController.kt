@@ -1,4 +1,4 @@
-package com.popalay.spotty.controllers
+package com.popalay.spotty.mvp.login
 
 import android.app.Activity
 import android.content.Intent
@@ -11,16 +11,16 @@ import com.popalay.spotty.App
 import com.popalay.spotty.R
 import com.popalay.spotty.auth.AuthManager
 import com.popalay.spotty.auth.ProviderName
-import com.popalay.spotty.controllers.base.BaseController
 import com.popalay.spotty.extensions.expand
 import com.popalay.spotty.extensions.inflate
 import com.popalay.spotty.extensions.toPx
+import com.popalay.spotty.mvp.base.BaseController
+import com.popalay.spotty.mvp.home.HomeController
 import kotlinx.android.synthetic.main.controller_login.view.*
 import javax.inject.Inject
 
 
-class LoginController : BaseController(), AuthManager.AuthListener {
-
+class LoginController : LoginView, BaseController<LoginView, LoginPresenter>(), AuthManager.AuthListener {
     @Inject lateinit var authManager: AuthManager
 
     init {
@@ -41,6 +41,8 @@ class LoginController : BaseController(), AuthManager.AuthListener {
         super.onAttach(view)
         expandButtonsBox()
     }
+
+    override fun createPresenter() = LoginPresenter()
 
     override fun onActivityResumed(activity: Activity?) {
         super.onActivityResumed(activity)

@@ -1,40 +1,37 @@
-package com.popalay.spotty.controllers
+package com.popalay.spotty.mvp.dashboard
 
-import android.location.Location
+import android.Manifest
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.*
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
-import com.bluelinelabs.conductor.rxlifecycle.ControllerEvent
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.MapsInitializer
-import com.google.android.gms.maps.model.LatLng
 import com.popalay.spotty.App
 import com.popalay.spotty.R
 import com.popalay.spotty.adapters.SpotAdapter
-import com.popalay.spotty.controllers.base.BaseController
 import com.popalay.spotty.data.DataManager
 import com.popalay.spotty.extensions.inflate
 import com.popalay.spotty.location.LocationManager
+import com.popalay.spotty.mvp.addspot.AddSpotController
+import com.popalay.spotty.mvp.base.BaseController
 import com.tbruyelle.rxpermissions.RxPermissions
 import kotlinx.android.synthetic.main.controller_dashboard.view.*
 import rx.android.schedulers.AndroidSchedulers
 import javax.inject.Inject
 
 
-class DashboardController : BaseController {
-
+class DashboardController : BaseController<DashboardView, DashboardPresenter> {
     @Inject lateinit var locationManager: LocationManager
+
     @Inject lateinit var dataManager: DataManager
-
-
     private val MENU_ADD: Int = Menu.FIRST
-    private val MENU_SEARCH: Int = MENU_ADD + 1
 
+
+    private val MENU_SEARCH: Int = MENU_ADD + 1
     private lateinit var mapView: MapView
 
     private val spotAdapter: SpotAdapter = SpotAdapter()
@@ -56,12 +53,14 @@ class DashboardController : BaseController {
         initUI(view)
     }
 
+    override fun createPresenter() = DashboardPresenter()
+
     private fun initUI(view: View) {
         initList(view)
         mapView = view.map_view
         mapView.onCreate(args)
         RxPermissions.getInstance(activity)
-                .request(android.Manifest.permission.ACCESS_FINE_LOCATION)
+                .request(Manifest.permission.ACCESS_FINE_LOCATION)
                 .subscribe({ granted ->
                     if (granted) {
                         mapView.getMapAsync {
@@ -74,7 +73,7 @@ class DashboardController : BaseController {
     }
 
     private fun initList(view: View) {
-        with(view.recycler){
+        with(view.recycler) {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(activity)
             adapter = spotAdapter
@@ -82,13 +81,13 @@ class DashboardController : BaseController {
         }
     }
 
-    private fun loadData(){
+    private fun loadData() {
         dataManager.getSpots()
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe {
-            spotAdapter.items = it
-            spotAdapter.notifyDataSetChanged()
-        }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    spotAdapter.items = it
+                    spotAdapter.notifyDataSetChanged()
+                }
     }
 
     private fun initMap(map: GoogleMap) {
@@ -103,7 +102,7 @@ class DashboardController : BaseController {
     }
 
     private fun showLastLocation(map: GoogleMap) {
-        locationManager.getLastLocation()
+/* todo       locationManager.getLastLocation()
                 .compose(bindUntilEvent<Location>(ControllerEvent.DETACH))
                 .filter { it != null }
                 .doOnNext { it.toString() }
@@ -112,7 +111,7 @@ class DashboardController : BaseController {
                 .subscribe {
                     val cameraUpdate = CameraUpdateFactory.newLatLngZoom(it, 10f)
                     map.animateCamera(cameraUpdate)
-                }
+                }*/
     }
 
     override fun onAttach(view: View) {

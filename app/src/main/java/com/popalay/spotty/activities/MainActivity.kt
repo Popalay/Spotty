@@ -6,7 +6,7 @@ import com.bluelinelabs.conductor.Conductor
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
 import com.popalay.spotty.R
-import com.popalay.spotty.controllers.SplashController
+import com.popalay.spotty.mvp.splash.SplashController
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : BaseActivity() {
