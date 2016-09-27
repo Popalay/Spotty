@@ -2,6 +2,7 @@ package com.popalay.spotty.controllers
 
 import android.location.Location
 import android.os.Bundle
+import android.support.v7.widget.LinearLayoutManager
 import android.view.*
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
@@ -14,7 +15,9 @@ import com.google.android.gms.maps.MapsInitializer
 import com.google.android.gms.maps.model.LatLng
 import com.popalay.spotty.App
 import com.popalay.spotty.R
+import com.popalay.spotty.adapters.SpotAdapter
 import com.popalay.spotty.controllers.base.BaseController
+import com.popalay.spotty.data.DataManager
 import com.popalay.spotty.extensions.inflate
 import com.popalay.spotty.location.LocationManager
 import com.tbruyelle.rxpermissions.RxPermissions
@@ -26,11 +29,15 @@ import javax.inject.Inject
 class DashboardController : BaseController {
 
     @Inject lateinit var locationManager: LocationManager
+    @Inject lateinit var dataManager: DataManager
+
 
     private val MENU_ADD: Int = Menu.FIRST
     private val MENU_SEARCH: Int = MENU_ADD + 1
 
     private lateinit var mapView: MapView
+
+    private val spotAdapter: SpotAdapter = SpotAdapter()
 
     init {
         App.appComponent.inject(this)
@@ -50,6 +57,7 @@ class DashboardController : BaseController {
     }
 
     private fun initUI(view: View) {
+        initList(view)
         mapView = view.map_view
         mapView.onCreate(args)
         RxPermissions.getInstance(activity)
@@ -63,6 +71,24 @@ class DashboardController : BaseController {
                         // Oups permission denied
                     }
                 })
+    }
+
+    private fun initList(view: View) {
+        with(view.recycler){
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(activity)
+            adapter = spotAdapter
+            loadData()
+        }
+    }
+
+    private fun loadData(){
+        dataManager.getSpots()
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe {
+            spotAdapter.items = it
+            spotAdapter.notifyDataSetChanged()
+        }
     }
 
     private fun initMap(map: GoogleMap) {

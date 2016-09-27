@@ -20,6 +20,7 @@ import com.popalay.spotty.controllers.base.BaseController
 import com.popalay.spotty.data.DataManager
 import com.popalay.spotty.extensions.inflate
 import com.popalay.spotty.extensions.toPx
+import com.popalay.spotty.models.Position
 import com.popalay.spotty.models.Spot
 import com.popalay.spotty.view.ElasticDragDismissFrameLayout
 import com.popalay.spotty.view.changehandlers.ScaleFadeChangeHandler
@@ -81,9 +82,9 @@ class AddSpotController : BaseController() {
     private fun saveSpot() {
         val spot: Spot = Spot()
         spot.title = view.title.text.toString().trim()
-        spot.description = view.description.toString().trim()
+        spot.description = view.description.text.toString().trim()
         spot.address = "${selectedPlace.name}, ${selectedPlace.address}"
-        spot.position = selectedPlace.latLng
+        spot.position = Position(selectedPlace.latLng.latitude, selectedPlace.latLng.longitude)
 
         dataManager.saveSpot(spot)
 
