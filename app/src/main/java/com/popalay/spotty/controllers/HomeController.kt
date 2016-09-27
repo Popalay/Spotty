@@ -18,7 +18,7 @@ import com.popalay.spotty.auth.AuthManager
 import com.popalay.spotty.controllers.base.BaseController
 import com.popalay.spotty.data.DataManager
 import com.popalay.spotty.extensions.inflate
-import com.popalay.spotty.extensions.loadImg
+import com.popalay.spotty.extensions.loadInCircle
 import kotlinx.android.synthetic.main.content_home.view.*
 import kotlinx.android.synthetic.main.controller_home.view.*
 import kotlinx.android.synthetic.main.footer_drawer.view.*
@@ -108,7 +108,7 @@ class HomeController : BaseController(), Drawer.OnDrawerItemClickListener {
     private fun setUserInfo(view: View) {
         dataManager.getCurrentUser()?.let {
             view.nav_view.getHeaderView(0).display_name.text = it.displayName
-            view.nav_view.getHeaderView(0).image_profile.loadImg(it.photoUrl?.toString())
+            view.nav_view.getHeaderView(0).image_profile.loadInCircle(it.photoUrl?.toString())
         }
     }
 

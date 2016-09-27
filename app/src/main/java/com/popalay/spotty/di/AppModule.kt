@@ -27,7 +27,15 @@ class AppModule(val app: App) {
 
     @Provides
     @Singleton
-    fun provideDataManager() = DataManager(FirebaseAuth.getInstance(), FirebaseDatabase.getInstance())
+    fun provideFirebaseDatabase(): FirebaseDatabase {
+        val firebaseDatabase = FirebaseDatabase.getInstance()
+        firebaseDatabase.setPersistenceEnabled(true)
+        return firebaseDatabase
+    }
+
+    @Provides
+    @Singleton
+    fun provideDataManager(firebaseDb: FirebaseDatabase) = DataManager(FirebaseAuth.getInstance(), firebaseDb)
 
     @Provides
     @Singleton

@@ -13,7 +13,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import com.bluelinelabs.conductor.Controller
 import com.popalay.spotty.R
-import com.popalay.spotty.widgets.CircleTransform
+import com.popalay.spotty.view.CircleTransform
 import com.rohitarya.picasso.facedetection.transformation.FaceCenterCrop
 import com.squareup.picasso.Picasso
 
@@ -64,7 +64,7 @@ fun Controller.snackbar(view: View, @StringRes text: Int, duration: Int = Snackb
 }
 
 
-fun ImageView.loadImg(imageUrl: String?) {
+fun ImageView.loadInCircle(imageUrl: String?) {
     if (TextUtils.isEmpty(imageUrl)) {
         Picasso.with(context).load(R.mipmap.ic_launcher)
                 .transform(CircleTransform())
@@ -75,6 +75,18 @@ fun ImageView.loadImg(imageUrl: String?) {
                 .centerInside()
                 .transform(FaceCenterCrop(100, 100))
                 .transform(CircleTransform())
+                .into(this)
+    }
+}
+
+fun ImageView.load(imageUrl: String?) {
+    if (TextUtils.isEmpty(imageUrl)) {
+        Picasso.with(context).load(R.color.gray)
+                .transform(CircleTransform())
+                .into(this)
+    } else {
+        Picasso.with(context).load(imageUrl)
+                .fit()
                 .into(this)
     }
 }

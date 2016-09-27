@@ -18,8 +18,8 @@ class GoogleAuthProvider(val context: Context) : AuthProvider, GoogleApiClient.O
 
     private val GOOGLE_RC_SIGN_IN = 0
 
-    private lateinit var googleApiClient: GoogleApiClient
-    private var gso: GoogleSignInOptions
+    private val googleApiClient: GoogleApiClient
+    private val gso: GoogleSignInOptions
 
     init {
         gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -27,6 +27,8 @@ class GoogleAuthProvider(val context: Context) : AuthProvider, GoogleApiClient.O
                 .requestEmail()
                 .requestProfile()
                 .build()
+        googleApiClient = GoogleApiClient.Builder(context)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso).build()
     }
 
     override fun handleSignIn(requestCode: Int, resultCode: Int, data: Intent?,
@@ -47,15 +49,12 @@ class GoogleAuthProvider(val context: Context) : AuthProvider, GoogleApiClient.O
 
 
     override fun signIn(controller: SupportController) {
-        googleApiClient = GoogleApiClient.Builder(context).enableAutoManage(controller.getBaseActivity(), this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso).build()
         val signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient)
         controller.startActivityForResult(signInIntent, GOOGLE_RC_SIGN_IN)
-        googleApiClient.stopAutoManage(controller.getBaseActivity())
     }
 
     override fun signOut() {
-        if (googleApiClient?.isConnected) {
+        if (googleApiClient.isConnected) {
             Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback { }
         }
     }

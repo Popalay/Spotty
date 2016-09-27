@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.popalay.spotty.widgets
+package com.popalay.spotty.view
 
 import android.graphics.*
 

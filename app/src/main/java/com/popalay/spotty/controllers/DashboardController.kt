@@ -4,11 +4,12 @@ import android.location.Location
 import android.os.Bundle
 import android.view.*
 import com.bluelinelabs.conductor.RouterTransaction
-import com.bluelinelabs.conductor.changehandler.HorizontalChangeHandler
+import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.bluelinelabs.conductor.rxlifecycle.ControllerEvent
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.MapsInitializer
 import com.google.android.gms.maps.model.LatLng
 import com.popalay.spotty.App
@@ -29,6 +30,8 @@ class DashboardController : BaseController {
     private val MENU_ADD: Int = Menu.FIRST
     private val MENU_SEARCH: Int = MENU_ADD + 1
 
+    private lateinit var mapView: MapView
+
     init {
         App.appComponent.inject(this)
     }
@@ -47,12 +50,13 @@ class DashboardController : BaseController {
     }
 
     private fun initUI(view: View) {
-        view.map_view.onCreate(args)
+        mapView = view.map_view
+        mapView.onCreate(args)
         RxPermissions.getInstance(activity)
                 .request(android.Manifest.permission.ACCESS_FINE_LOCATION)
                 .subscribe({ granted ->
                     if (granted) {
-                        view.map_view.getMapAsync {
+                        mapView.getMapAsync {
                             initMap(it)
                         }
                     } else {
@@ -87,22 +91,22 @@ class DashboardController : BaseController {
 
     override fun onAttach(view: View) {
         super.onAttach(view)
-        view.map_view.onResume()
+        mapView.onResume()
     }
 
     override fun onDetach(view: View) {
         super.onDetach(view)
-        view.map_view.onPause()
+        mapView.onPause()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-//        view.map_view.onDestroy()
+        mapView.onDestroy()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        view.map_view.onSaveInstanceState(outState)
+        mapView.onSaveInstanceState(outState)
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?) {
@@ -119,32 +123,19 @@ class DashboardController : BaseController {
         return when (item.itemId) {
             MENU_ADD -> {
                 addSpot()
-                return true
+                true
             }
             MENU_SEARCH -> {
-                return true
+                true
             }
             else -> super.onOptionsItemSelected(item)
         }
     }
 
     private fun addSpot() {
-        parentController.childRouters[0].pushController(RouterTransaction.with(AddSpotController())
-                .popChangeHandler(HorizontalChangeHandler())
-                .pushChangeHandler(HorizontalChangeHandler()))
-
-
-        /* try {
-             val intentBuilder = PlacePicker.IntentBuilder()
-             val intent = intentBuilder.build(parentController.activity)
-             // Start the intent by requesting a result,
-             // identified by a request code.
-             parentController.activity.startActivityForResult(intent, 101)
-         } catch (e: GooglePlayServicesRepairableException) {
-             // ...
-         } catch (e: GooglePlayServicesNotAvailableException) {
-             // ...
-         }*/
+        parentController.router.pushController(RouterTransaction.with(AddSpotController())
+                .popChangeHandler(VerticalChangeHandler(false))
+                .pushChangeHandler(VerticalChangeHandler()))
     }
 
 }

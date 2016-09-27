@@ -1,5 +1,6 @@
 package com.popalay.spotty.di
 
+import com.popalay.spotty.controllers.AddSpotController
 import com.popalay.spotty.controllers.DashboardController
 import com.popalay.spotty.controllers.SplashController
 import dagger.Component
@@ -11,4 +12,5 @@ interface AppComponent {
     fun plus(module: SessionModule): SessionComponent
     fun inject(splashController: SplashController)
     fun inject(splashController: DashboardController)
+    fun inject(addSpotController: AddSpotController)
 }
