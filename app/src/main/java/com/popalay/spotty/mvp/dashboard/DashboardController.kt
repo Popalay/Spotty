@@ -24,7 +24,7 @@ import rx.android.schedulers.AndroidSchedulers
 import javax.inject.Inject
 
 
-class DashboardController : BaseController<DashboardView, DashboardPresenter> {
+class DashboardController : DashboardView, BaseController<DashboardView, DashboardPresenter> {
     @Inject lateinit var locationManager: LocationManager
 
     @Inject lateinit var dataManager: DataManager

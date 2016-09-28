@@ -4,4 +4,6 @@ import com.hannesdorfmann.mosby.mvp.MvpView
 
 
 interface LoginView : MvpView {
+    fun showProgress()
+    fun hideProgress()
 }

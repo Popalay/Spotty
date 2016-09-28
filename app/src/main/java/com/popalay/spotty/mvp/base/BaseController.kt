@@ -21,12 +21,12 @@ abstract class BaseController<V : MvpView, P : MvpPresenter<V>>() : SupportContr
     protected open fun onViewBound(view: View) {
     }
 
-    protected fun hideProgress() {
-        getBaseActivity().hideProgress()
+    protected fun hideProgressDialog() {
+        getBaseActivity().hideProgressDialog()
     }
 
-    protected fun showProgress() {
-        getBaseActivity().showProgress()
+    protected fun showProgressDialog() {
+        getBaseActivity().showProgressDialog()
     }
 
     protected fun showSnackbar(message: String) {

@@ -30,11 +30,11 @@ class MainActivity : BaseActivity() {
         }
     }
 
-    override fun showProgress() {
+    override fun showProgressDialog() {
         progress_bar.visibility = View.VISIBLE
     }
 
-    override fun hideProgress() {
+    override fun hideProgressDialog() {
         progress_bar.visibility = View.GONE
     }
 }

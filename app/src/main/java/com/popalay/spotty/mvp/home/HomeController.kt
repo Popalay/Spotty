@@ -15,10 +15,10 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
 import com.popalay.spotty.App
 import com.popalay.spotty.R
 import com.popalay.spotty.auth.AuthManager
-import com.popalay.spotty.mvp.base.BaseController
 import com.popalay.spotty.data.DataManager
 import com.popalay.spotty.extensions.inflate
 import com.popalay.spotty.extensions.loadInCircle
+import com.popalay.spotty.mvp.base.BaseController
 import com.popalay.spotty.mvp.dashboard.DashboardController
 import com.popalay.spotty.mvp.login.LoginController
 import dagger.Lazy
@@ -28,8 +28,7 @@ import kotlinx.android.synthetic.main.footer_drawer.view.*
 import kotlinx.android.synthetic.main.header_drawer.view.*
 import javax.inject.Inject
 
-class HomeController : BaseController<HomeView, HomePresenter>(), Drawer.OnDrawerItemClickListener {
-    private val DEFAULT_DRAWER_POSITION = -1L
+class HomeController : HomeView, BaseController<HomeView, HomePresenter>(), Drawer.OnDrawerItemClickListener {
 
     @Inject lateinit var authManager: Lazy<AuthManager>
 

@@ -16,19 +16,19 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.pawegio.kandroid.d
 import com.popalay.spotty.App
 import com.popalay.spotty.R
-import com.popalay.spotty.mvp.base.BaseController
 import com.popalay.spotty.data.DataManager
 import com.popalay.spotty.extensions.inflate
 import com.popalay.spotty.extensions.toPx
 import com.popalay.spotty.models.Position
 import com.popalay.spotty.models.Spot
+import com.popalay.spotty.mvp.base.BaseController
 import com.popalay.spotty.view.ElasticDragDismissFrameLayout
 import com.popalay.spotty.view.changehandlers.ScaleFadeChangeHandler
 import kotlinx.android.synthetic.main.controller_add_spot.view.*
 import javax.inject.Inject
 
 
-class AddSpotController : BaseController<AddSpotView, AddSpotPresenter>() {
+class AddSpotController : AddSpotView, BaseController<AddSpotView, AddSpotPresenter>() {
     private val REQUEST_PLACE_PICKER = 100
 
     private val MENU_ACCEPT: Int = Menu.FIRST
