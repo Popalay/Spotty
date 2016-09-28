@@ -28,8 +28,7 @@ class AddSpotPresenter : RxPresenter<AddSpotView>() {
     }
 
     fun saveSpot(spot: Spot) {
-        if (pickedPlace == null) {
-            view?.showError("Please, pick your place")
+        if (!validateSpot(spot)) {
             return
         }
         pickedPlace?.let {
@@ -47,5 +46,23 @@ class AddSpotPresenter : RxPresenter<AddSpotView>() {
     fun setPickedPlace(place: Place) {
         pickedPlace = place
         view?.showPickedPlace(place)
+    }
+
+    private fun validateSpot(spot: Spot): Boolean {
+        return when {
+            pickedPlace == null -> {
+                view?.showError("Please, pick your place")
+                false
+            }
+            spot.title.isNullOrBlank() -> {
+                view?.showError("Please, fill title")
+                false
+            }
+            spot.description.isNullOrBlank() -> {
+                view?.showError("Please, fill description")
+                false
+            }
+            else -> true
+        }
     }
 }

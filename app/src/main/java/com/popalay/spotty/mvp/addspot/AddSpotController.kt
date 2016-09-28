@@ -121,9 +121,7 @@ class AddSpotController : AddSpotView, BaseController<AddSpotView, AddSpotPresen
             view.content_layout.addView(it, 1)
             it.layoutParams.height = 200.toPx()
             it.onCreate(args)
-            it.getMapAsync {
-                it.addMarker(MarkerOptions().position(latLng))
-            }
+            it.getMapAsync { it.addMarker(MarkerOptions().position(latLng)) }
         }
     }
 
