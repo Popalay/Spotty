@@ -3,6 +3,7 @@ package com.popalay.spotty.mvp.addspot
 import android.app.Activity
 import android.content.Intent
 import android.view.*
+import com.github.rubensousa.bottomsheetbuilder.BottomSheetBuilder
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException
 import com.google.android.gms.common.GooglePlayServicesRepairableException
 import com.google.android.gms.location.places.Place
@@ -96,6 +97,14 @@ class AddSpotController : AddSpotView, BaseController<AddSpotView, AddSpotPresen
         }
         view.pick_place.setOnClickListener {
             presenter.pickPlace()
+        }
+        view.add_photo.setOnClickListener {
+            BottomSheetBuilder(activity, R.style.AppTheme_BottomSheetDialog)
+                    .setMode(BottomSheetBuilder.MODE_LIST)
+                    .setMenu(R.menu.add_photo_dialog)
+                    .setItemClickListener{
+
+                    }.createDialog().show()
         }
     }
 

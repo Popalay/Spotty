@@ -16,4 +16,6 @@
 
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
+    <string name="from_camera">From Camera</string>
+    <string name="from_gallery">From Gallery</string>
 </resources>
