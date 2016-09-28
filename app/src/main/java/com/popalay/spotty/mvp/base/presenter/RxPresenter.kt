@@ -28,6 +28,7 @@ abstract class RxPresenter<V : MvpView> : MvpBasePresenter<V>(), PresenterLifecy
     }
 
 
+    @CallSuper
     override fun attachView(view: V) {
         super.attachView(view)
         for (lifecycleListener in lifecycleListeners) {

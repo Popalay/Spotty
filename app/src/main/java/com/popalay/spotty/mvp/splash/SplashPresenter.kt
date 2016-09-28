@@ -3,8 +3,8 @@ package com.popalay.spotty.mvp.splash
 import com.pawegio.kandroid.d
 import com.popalay.spotty.App
 import com.popalay.spotty.data.DataManager
-import com.popalay.spotty.mvp.base.presenter.RxPresenter
 import com.popalay.spotty.mvp.base.presenter.PresenterEvent
+import com.popalay.spotty.mvp.base.presenter.RxPresenter
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
 import java.util.concurrent.TimeUnit
@@ -20,7 +20,7 @@ class SplashPresenter : RxPresenter<SplashView>() {
     }
 
     override fun attachView(view: SplashView) {
-        //super.attachView(view)
+        super.attachView(view)
         Observable.interval(3000, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
                 .compose(bindUntilEvent<Long>(PresenterEvent.DETACH_VIEW))
                 .observeOn(AndroidSchedulers.mainThread())
