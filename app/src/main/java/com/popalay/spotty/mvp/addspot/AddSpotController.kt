@@ -2,6 +2,8 @@ package com.popalay.spotty.mvp.addspot
 
 import android.app.Activity
 import android.content.Intent
+import android.support.v7.widget.OrientationHelper
+import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.*
 import com.github.rubensousa.bottomsheetbuilder.BottomSheetBuilder
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException
@@ -14,14 +16,19 @@ import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.popalay.spotty.App
 import com.popalay.spotty.R
+import com.popalay.spotty.adapters.AddSpotPhotosAdapter
+import com.popalay.spotty.data.ImageManager
 import com.popalay.spotty.extensions.inflate
 import com.popalay.spotty.extensions.toPx
 import com.popalay.spotty.models.Spot
 import com.popalay.spotty.mvp.base.BaseController
 import com.popalay.spotty.ui.ElasticDragDismissFrameLayout
 import com.popalay.spotty.ui.changehandlers.ScaleFadeChangeHandler
+import com.rohit.recycleritemclicksupport.RecyclerItemClickSupport
 import kotlinx.android.synthetic.main.controller_add_spot.view.*
+import javax.inject.Inject
 
 
 class AddSpotController : AddSpotView, BaseController<AddSpotView, AddSpotPresenter>() {
@@ -30,9 +37,13 @@ class AddSpotController : AddSpotView, BaseController<AddSpotView, AddSpotPresen
 
     private val MENU_ACCEPT: Int = Menu.FIRST
 
+    @Inject lateinit var imageManager: ImageManager
+    private lateinit var addPhotosAdapter: AddSpotPhotosAdapter
+
     private var mapView: MapView? = null
 
     init {
+        App.appComponent.inject(this)
         setHasOptionsMenu(true)
     }
 
@@ -89,6 +100,7 @@ class AddSpotController : AddSpotView, BaseController<AddSpotView, AddSpotPresen
         setSupportActionBar(view.toolbar)
         setTitle("Spot creating")
         getSupportActionBar()?.setHomeButtonEnabled(true)
+        initList(view)
         with(view.toolbar) {
             setNavigationIcon(R.drawable.ic_clear)
             setNavigationOnClickListener {
@@ -98,14 +110,32 @@ class AddSpotController : AddSpotView, BaseController<AddSpotView, AddSpotPresen
         view.pick_place.setOnClickListener {
             presenter.pickPlace()
         }
-        view.add_photo.setOnClickListener {
-            BottomSheetBuilder(activity, R.style.AppTheme_BottomSheetDialog)
-                    .setMode(BottomSheetBuilder.MODE_LIST)
-                    .setMenu(R.menu.add_photo_dialog)
-                    .setItemClickListener{
+    }
 
-                    }.createDialog().show()
+    private fun initList(view: View) {
+        with(view.recycler) {
+            layoutManager = StaggeredGridLayoutManager(3, OrientationHelper.HORIZONTAL)
+            setHasFixedSize(true)
+            addPhotosAdapter = AddSpotPhotosAdapter()
+            adapter = addPhotosAdapter
+            RecyclerItemClickSupport.addTo(this).setOnItemClickListener { recyclerView, i, view ->
+                if (i == 0) {
+                    openChoosePhotoDialog()
+                }
+            }
         }
+    }
+
+    private fun openChoosePhotoDialog() {
+        BottomSheetBuilder(activity, R.style.AppTheme_BottomSheetDialog)
+                .setMode(BottomSheetBuilder.MODE_LIST)
+                .setMenu(R.menu.add_photo_dialog)
+                .setItemClickListener {
+                    when (it.itemId) {
+                        R.id.gallery -> imageManager.pickPhoto()
+                        R.id.camera -> imageManager.takePhoto()
+                    }
+                }.createDialog().show()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

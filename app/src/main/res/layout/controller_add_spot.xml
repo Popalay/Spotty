@@ -86,15 +86,12 @@
 
                     </android.support.design.widget.TextInputLayout>
 
-                    <Button
-                        android:id="@+id/add_photo"
-                        style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
-                        android:layout_width="wrap_content"
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/recycler"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/normal"
-                        android:paddingBottom="0dp"
-                        android:paddingTop="0dp"
-                        android:text="App photo" />
+                        android:nestedScrollingEnabled="false"
+                        android:padding="@dimen/normal" />
 
                 </LinearLayout>
 

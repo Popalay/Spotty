@@ -74,7 +74,7 @@ class DashboardController : DashboardView, BaseController<DashboardView, Dashboa
     }
 
     override fun setData(data: List<Spot>) {
-        spotAdapter.items = data
+        spotAdapter.items = data.toMutableList()
         spotAdapter.notifyDataSetChanged()
     }
 

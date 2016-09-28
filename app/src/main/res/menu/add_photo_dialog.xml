@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/gallery"
-        android:title="@string/from_gallery" />
-    <item
-        android:id="@+id/camera"
-        android:title="@string/from_camera" />
+    <item android:title="@string/pick_from">
+        <menu>
+            <item
+                android:id="@+id/gallery"
+                android:icon="@drawable/ic_image"
+                android:title="@string/gallery" />
+            <item
+                android:id="@+id/camera"
+                android:icon="@drawable/ic_camera"
+                android:title="@string/camera" />
+        </menu>
+    </item>
 </menu>

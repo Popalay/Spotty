@@ -1,14 +1,14 @@
 package com.popalay.spotty.adapters
 
+import android.graphics.Bitmap
+import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.popalay.spotty.R
-import com.popalay.spotty.models.Spot
-import kotlinx.android.synthetic.main.item_spot.view.*
 import java.util.*
 
-class SpotAdapter : UltimateAdapter<ViewHolder>() {
+class AddSpotPhotosAdapter : UltimateAdapter<ViewHolder>(), UltimateAdapter.HeaderInterface {
 
-    var items: MutableList<Spot> = ArrayList()
+    var items: MutableList<Bitmap> = ArrayList()
 
     override fun clear() {
         items.clear()
@@ -28,7 +28,14 @@ class SpotAdapter : UltimateAdapter<ViewHolder>() {
     override fun bindDataVH(vh: ViewHolder, dataPosition: Int) {
         val item = items[dataPosition]
         with(vh.itemView) {
-            name.text = item.title
+
         }
+    }
+
+    override fun getHeaderVH(v: View) = HeaderViewHolder(v)
+
+    override fun getHeaderViewResId() = R.layout.header_add_photo
+
+    override fun bindHeaderVH(vh: RecyclerView.ViewHolder) {
     }
 }
