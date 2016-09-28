@@ -13,7 +13,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import com.bluelinelabs.conductor.Controller
 import com.popalay.spotty.R
-import com.popalay.spotty.view.CircleTransform
+import com.popalay.spotty.ui.CircleTransform
 import com.rohitarya.picasso.facedetection.transformation.FaceCenterCrop
 import com.squareup.picasso.Picasso
 

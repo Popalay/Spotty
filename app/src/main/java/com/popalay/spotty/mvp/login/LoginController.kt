@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.HorizontalChangeHandler
+import com.pawegio.kandroid.d
 import com.popalay.spotty.R
-import com.popalay.spotty.auth.AuthManager
 import com.popalay.spotty.auth.ProviderName
 import com.popalay.spotty.extensions.expand
 import com.popalay.spotty.extensions.inflate
@@ -17,7 +17,7 @@ import com.popalay.spotty.mvp.home.HomeController
 import kotlinx.android.synthetic.main.controller_login.view.*
 
 
-class LoginController : LoginView, BaseController<LoginView, LoginPresenter>(), AuthManager.AuthListener {
+class LoginController : LoginView, BaseController<LoginView, LoginPresenter>() {
 
     override fun inflateView(inflater: LayoutInflater, container: ViewGroup): View {
         return container.inflate(R.layout.controller_login, false)
@@ -46,24 +46,15 @@ class LoginController : LoginView, BaseController<LoginView, LoginPresenter>(), 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        //authManager.handleSignIn(requestCode, resultCode, data)
+        presenter.handleSignIn(requestCode, resultCode, data)
     }
 
     private fun expandButtonsBox() {
         view.buttons_box.expand(220.toPx())
     }
 
-    override fun authCompleted() {
-        hideProgressDialog()
-        toHome()
-    }
-
-    override fun authFailed() {
-        hideProgressDialog()
-        showSnackbar("Authentication failed")
-    }
-
-    private fun toHome() {
+    override fun loginSuccessful() {
+        d("suucces")
         router.setRoot(RouterTransaction.with(HomeController())
                 .pushChangeHandler(HorizontalChangeHandler())
                 .popChangeHandler(HorizontalChangeHandler()))
@@ -75,5 +66,9 @@ class LoginController : LoginView, BaseController<LoginView, LoginPresenter>(), 
 
     override fun hideProgress() {
         hideProgressDialog()
+    }
+
+    override fun showError(message: String) {
+        showSnackbar(message)
     }
 }

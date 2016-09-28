@@ -4,25 +4,27 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clickable="true"
-    android:foreground="?attr/selectableItemBackground">
+    android:foreground="?attr/selectableItemBackground"
+    android:padding="@dimen/small">
 
     <TextView
         android:id="@+id/name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginStart="@dimen/normal"
         android:layout_toStartOf="@+id/route_button"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+        android:textColor="@color/gray"
         tools:text="Sinka" />
 
-    <android.support.design.widget.FloatingActionButton
+    <ImageButton
         android:id="@+id/route_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_margin="@dimen/normal"
         android:layout_marginStart="@dimen/small"
-        android:src="@drawable/ic_route" />
+        android:background="?selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_route"
+        android:tint="@color/gray" />
 
 </RelativeLayout>

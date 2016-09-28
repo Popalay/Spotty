@@ -1,6 +1,5 @@
 package com.popalay.spotty.mvp.splash
 
-import com.pawegio.kandroid.d
 import com.popalay.spotty.App
 import com.popalay.spotty.data.DataManager
 import com.popalay.spotty.mvp.base.presenter.PresenterEvent
@@ -35,6 +34,5 @@ class SplashPresenter : RxPresenter<SplashView>() {
 
     override fun detachView(retainInstance: Boolean) {
         super.detachView(retainInstance)
-        d("detach")
     }
 }

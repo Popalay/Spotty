@@ -11,7 +11,7 @@ import java.util.*
 
 class SpotAdapter : RecyclerView.Adapter<SpotAdapter.ViewHolder>() {
 
-    var items: MutableList<Spot> = ArrayList()
+    var items: List<Spot> = ArrayList()
 
     override fun getItemId(position: Int): Long {
         return position.toLong()

@@ -7,40 +7,32 @@ import android.view.*
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.MapsInitializer
-import com.popalay.spotty.App
+import com.google.android.gms.maps.model.LatLng
 import com.popalay.spotty.R
 import com.popalay.spotty.adapters.SpotAdapter
-import com.popalay.spotty.data.DataManager
 import com.popalay.spotty.extensions.inflate
-import com.popalay.spotty.location.LocationManager
+import com.popalay.spotty.models.Spot
 import com.popalay.spotty.mvp.addspot.AddSpotController
 import com.popalay.spotty.mvp.base.BaseController
 import com.tbruyelle.rxpermissions.RxPermissions
 import kotlinx.android.synthetic.main.controller_dashboard.view.*
-import rx.android.schedulers.AndroidSchedulers
-import javax.inject.Inject
 
 
-class DashboardController : DashboardView, BaseController<DashboardView, DashboardPresenter> {
-    @Inject lateinit var locationManager: LocationManager
+class DashboardController : DashboardView, BaseController<DashboardView, DashboardPresenter>() {
 
-    @Inject lateinit var dataManager: DataManager
     private val MENU_ADD: Int = Menu.FIRST
-
-
     private val MENU_SEARCH: Int = MENU_ADD + 1
+
     private lateinit var mapView: MapView
+    private lateinit var map: GoogleMap
 
     private val spotAdapter: SpotAdapter = SpotAdapter()
 
     init {
-        App.appComponent.inject(this)
-    }
-
-    constructor() : super() {
         setHasOptionsMenu(true)
     }
 
@@ -50,21 +42,21 @@ class DashboardController : DashboardView, BaseController<DashboardView, Dashboa
 
     override fun onViewBound(view: View) {
         super.onViewBound(view)
-        initUI(view)
+        mapView = view.map_view
+        mapView.onCreate(args)
     }
 
     override fun createPresenter() = DashboardPresenter()
 
     private fun initUI(view: View) {
         initList(view)
-        mapView = view.map_view
-        mapView.onCreate(args)
         RxPermissions.getInstance(activity)
                 .request(Manifest.permission.ACCESS_FINE_LOCATION)
                 .subscribe({ granted ->
                     if (granted) {
                         mapView.getMapAsync {
-                            initMap(it)
+                            map = it
+                            initMap()
                         }
                     } else {
                         // Oups permission denied
@@ -77,20 +69,16 @@ class DashboardController : DashboardView, BaseController<DashboardView, Dashboa
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(activity)
             adapter = spotAdapter
-            loadData()
+            presenter.loadData()
         }
     }
 
-    private fun loadData() {
-        dataManager.getSpots()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    spotAdapter.items = it
-                    spotAdapter.notifyDataSetChanged()
-                }
+    override fun setData(data: List<Spot>) {
+        spotAdapter.items = data
+        spotAdapter.notifyDataSetChanged()
     }
 
-    private fun initMap(map: GoogleMap) {
+    private fun initMap() {
         map.uiSettings.isMyLocationButtonEnabled = true
         map.isMyLocationEnabled = true
         try {
@@ -98,24 +86,17 @@ class DashboardController : DashboardView, BaseController<DashboardView, Dashboa
         } catch (e: GooglePlayServicesNotAvailableException) {
             e.printStackTrace()
         }
-        showLastLocation(map)
+        presenter.getLastLocation()
     }
 
-    private fun showLastLocation(map: GoogleMap) {
-/* todo       locationManager.getLastLocation()
-                .compose(bindUntilEvent<Location>(ControllerEvent.DETACH))
-                .filter { it != null }
-                .doOnNext { it.toString() }
-                .map { LatLng(it.latitude, it.longitude) }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    val cameraUpdate = CameraUpdateFactory.newLatLngZoom(it, 10f)
-                    map.animateCamera(cameraUpdate)
-                }*/
+    override fun setLocation(position: LatLng) {
+        val cameraUpdate = CameraUpdateFactory.newLatLngZoom(position, 15f)
+        map.animateCamera(cameraUpdate)
     }
 
     override fun onAttach(view: View) {
         super.onAttach(view)
+        initUI(view)
         mapView.onResume()
     }
 
@@ -147,7 +128,7 @@ class DashboardController : DashboardView, BaseController<DashboardView, Dashboa
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             MENU_ADD -> {
-                addSpot()
+                presenter.addSpot()
                 true
             }
             MENU_SEARCH -> {
@@ -157,7 +138,7 @@ class DashboardController : DashboardView, BaseController<DashboardView, Dashboa
         }
     }
 
-    private fun addSpot() {
+    override fun startAddSpot() {
         parentController.router.pushController(RouterTransaction.with(AddSpotController())
                 .popChangeHandler(VerticalChangeHandler(false))
                 .pushChangeHandler(VerticalChangeHandler()))

@@ -22,8 +22,8 @@ import com.popalay.spotty.extensions.toPx
 import com.popalay.spotty.models.Position
 import com.popalay.spotty.models.Spot
 import com.popalay.spotty.mvp.base.BaseController
-import com.popalay.spotty.view.ElasticDragDismissFrameLayout
-import com.popalay.spotty.view.changehandlers.ScaleFadeChangeHandler
+import com.popalay.spotty.ui.ElasticDragDismissFrameLayout
+import com.popalay.spotty.ui.changehandlers.ScaleFadeChangeHandler
 import kotlinx.android.synthetic.main.controller_add_spot.view.*
 import javax.inject.Inject
 

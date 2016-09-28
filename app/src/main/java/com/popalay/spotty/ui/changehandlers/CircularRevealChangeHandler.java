@@ -1,4 +1,4 @@
-package com.popalay.spotty.view.changehandlers;
+package com.popalay.spotty.ui.changehandlers;
 
 import android.animation.Animator;
 import android.annotation.TargetApi;
