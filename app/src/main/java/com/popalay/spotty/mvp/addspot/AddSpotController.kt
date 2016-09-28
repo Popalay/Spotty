@@ -13,39 +13,30 @@ import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import com.pawegio.kandroid.d
-import com.popalay.spotty.App
 import com.popalay.spotty.R
-import com.popalay.spotty.data.DataManager
 import com.popalay.spotty.extensions.inflate
 import com.popalay.spotty.extensions.toPx
-import com.popalay.spotty.models.Position
 import com.popalay.spotty.models.Spot
 import com.popalay.spotty.mvp.base.BaseController
 import com.popalay.spotty.ui.ElasticDragDismissFrameLayout
 import com.popalay.spotty.ui.changehandlers.ScaleFadeChangeHandler
 import kotlinx.android.synthetic.main.controller_add_spot.view.*
-import javax.inject.Inject
 
 
 class AddSpotController : AddSpotView, BaseController<AddSpotView, AddSpotPresenter>() {
+
     private val REQUEST_PLACE_PICKER = 100
 
     private val MENU_ACCEPT: Int = Menu.FIRST
-    @Inject lateinit var dataManager: DataManager
 
     private var mapView: MapView? = null
 
-    private lateinit var selectedPlace: Place
-
     init {
-        App.appComponent.inject(this)
         setHasOptionsMenu(true)
     }
 
     private val dragDismissListener = object : ElasticDragDismissFrameLayout.ElasticDragDismissCallback() {
         override fun onDragDismissed() {
-            d("sdf")
             overridePopHandler(ScaleFadeChangeHandler())
             router.popCurrentController()
         }
@@ -85,12 +76,7 @@ class AddSpotController : AddSpotView, BaseController<AddSpotView, AddSpotPresen
         val spot: Spot = Spot()
         spot.title = view.title.text.toString().trim()
         spot.description = view.description.text.toString().trim()
-        spot.address = "${selectedPlace.name}, ${selectedPlace.address}"
-        spot.position = Position(selectedPlace.latLng.latitude, selectedPlace.latLng.longitude)
-
-        dataManager.saveSpot(spot)
-
-        router.popCurrentController()
+        presenter.saveSpot(spot)
     }
 
     override fun onDestroyView(view: View) {
@@ -109,29 +95,13 @@ class AddSpotController : AddSpotView, BaseController<AddSpotView, AddSpotPresen
             }
         }
         view.pick_place.setOnClickListener {
-            pickPlace()
-        }
-    }
-
-    private fun pickPlace() {
-        try {
-            val intentBuilder = PlacePicker.IntentBuilder()
-            val intent = intentBuilder.build(activity)
-            // Start the intent by requesting a result,
-            // identified by a request code.
-            startActivityForResult(intent, REQUEST_PLACE_PICKER)
-        } catch (e: GooglePlayServicesRepairableException) {
-            // ...
-        } catch (e: GooglePlayServicesNotAvailableException) {
-            // ...
+            presenter.pickPlace()
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode === REQUEST_PLACE_PICKER && resultCode === Activity.RESULT_OK) {
-            selectedPlace = PlacePicker.getPlace(activity, data)
-            view.pick_place.text = "${selectedPlace.name}, ${selectedPlace.address}"
-            updateMap(selectedPlace.latLng)
+            presenter.setPickedPlace(PlacePicker.getPlace(activity, data))
         } else {
             super.onActivityResult(requestCode, resultCode, data)
         }
@@ -145,7 +115,7 @@ class AddSpotController : AddSpotView, BaseController<AddSpotView, AddSpotPresen
         val mapOptions = GoogleMapOptions()
                 .mapType(GoogleMap.MAP_TYPE_NORMAL)
                 .liteMode(true)
-                .camera(CameraPosition.fromLatLngZoom(latLng, 15f))
+                .camera(CameraPosition.fromLatLngZoom(latLng, 16f))
         mapView = MapView(activity, mapOptions)
         mapView?.let {
             view.content_layout.addView(it, 1)
@@ -155,5 +125,28 @@ class AddSpotController : AddSpotView, BaseController<AddSpotView, AddSpotPresen
                 it.addMarker(MarkerOptions().position(latLng))
             }
         }
+    }
+
+    override fun showError(message: String) {
+        showSnackbar(message)
+    }
+
+    override fun onSpotSaved() {
+        router.popCurrentController()
+    }
+
+    override fun pickPlace() {
+        try {
+            val intentBuilder = PlacePicker.IntentBuilder()
+            val intent = intentBuilder.build(activity)
+            startActivityForResult(intent, REQUEST_PLACE_PICKER)
+        } catch (e: GooglePlayServicesRepairableException) {
+        } catch (e: GooglePlayServicesNotAvailableException) {
+        }
+    }
+
+    override fun showPickedPlace(place: Place) {
+        view.pick_place.text = "${place.name}, ${place.address}"
+        updateMap(place.latLng)
     }
 }
