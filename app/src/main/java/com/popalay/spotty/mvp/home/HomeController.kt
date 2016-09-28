@@ -5,40 +5,29 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import com.bluelinelabs.conductor.Controller
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
-import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
 import com.bluelinelabs.conductor.changehandler.HorizontalChangeHandler
 import com.mikepenz.materialdrawer.Drawer
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
-import com.popalay.spotty.App
 import com.popalay.spotty.R
-import com.popalay.spotty.auth.AuthManager
-import com.popalay.spotty.data.DataManager
 import com.popalay.spotty.extensions.inflate
 import com.popalay.spotty.extensions.loadInCircle
+import com.popalay.spotty.models.User
 import com.popalay.spotty.mvp.base.BaseController
 import com.popalay.spotty.mvp.dashboard.DashboardController
 import com.popalay.spotty.mvp.login.LoginController
-import dagger.Lazy
 import kotlinx.android.synthetic.main.content_home.view.*
 import kotlinx.android.synthetic.main.controller_home.view.*
 import kotlinx.android.synthetic.main.footer_drawer.view.*
 import kotlinx.android.synthetic.main.header_drawer.view.*
-import javax.inject.Inject
 
 class HomeController : HomeView, BaseController<HomeView, HomePresenter>(), Drawer.OnDrawerItemClickListener {
 
-    @Inject lateinit var authManager: Lazy<AuthManager>
-
-    @Inject lateinit var dataManager: DataManager
     private lateinit var childRouter: Router
-
     private lateinit var toggle: ActionBarDrawerToggle
 
     init {
-        App.sessionComponent.inject(this)
         setHasOptionsMenu(true)
     }
 
@@ -80,29 +69,24 @@ class HomeController : HomeView, BaseController<HomeView, HomePresenter>(), Draw
         view.drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
 
-        setUserInfo(view)
-
         view.logout.setOnClickListener {
-            signOut()
+            presenter.signOut()
         }
     }
 
-    private fun signOut() {
-        authManager.get().signOut()
+    override fun startSignIn() {
         router.setRoot(RouterTransaction.with(LoginController())
                 .popChangeHandler(HorizontalChangeHandler())
                 .pushChangeHandler(HorizontalChangeHandler()))
     }
 
-    private fun setUserInfo(view: View) {
-        dataManager.getCurrentUser()?.let {
-            view.nav_view.getHeaderView(0).display_name.text = it.displayName
-            view.nav_view.getHeaderView(0).image_profile.loadInCircle(it.photoUrl?.toString())
-        }
+    override fun setUserInfo(user: User) {
+        view.nav_view.getHeaderView(0).display_name.text = user.displayName
+        view.nav_view.getHeaderView(0).image_profile.loadInCircle(user.profilePhoto.toString())
     }
 
     override fun onItemClick(view: View?, position: Int, drawerItem: IDrawerItem<*, *>?): Boolean {
-        setController(getControllerByPosition(position.toLong()))
+        presenter.open(position)
         closeDrawer()
         return true
     }
@@ -111,23 +95,12 @@ class HomeController : HomeView, BaseController<HomeView, HomePresenter>(), Draw
         view.drawer_layout.closeDrawers()
     }
 
-    fun setController(controller: Controller) {
-        if (childRouter.backstackSize > 0) {
-            childRouter.replaceTopController(RouterTransaction.with(controller)
-                    .pushChangeHandler(FadeChangeHandler())
-                    .popChangeHandler(FadeChangeHandler()))
-        } else {
-            childRouter.pushController(RouterTransaction.with(controller)
-                    .pushChangeHandler(FadeChangeHandler())
-                    .popChangeHandler(FadeChangeHandler()))
-        }
+    override fun openMap() {
     }
 
-    fun getControllerByPosition(position: Long): Controller {
-        return when (position.toInt()) {
-            -1 -> DashboardController()
-            else -> DashboardController()
-        }
+    override fun openLikedSpots() {
     }
 
+    override fun openMySpots() {
+    }
 }
