@@ -35,7 +35,7 @@ class GoogleAuthProvider(val context: Context) : AuthProvider, GoogleApiClient.O
                               firebaseAuth: FirebaseAuth, result: (Task<AuthResult>, User) -> Unit) {
         if (requestCode == GOOGLE_RC_SIGN_IN) {
             val signInResult = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
-            val account = signInResult.signInAccount
+            val account = signInResult?.signInAccount
             account?.let {
                 val credential = GoogleAuthProvider.getCredential(account.idToken, null)
                 result(firebaseAuth.signInWithCredential(credential),

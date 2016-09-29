@@ -34,6 +34,7 @@ class HomePresenter : RxPresenter<HomeView>() {
     }
 
     fun signOut() {
+        view?.startSignIn()
         authManager.get().signOut()
     }
 

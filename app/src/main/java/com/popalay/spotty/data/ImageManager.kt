@@ -1,15 +1,16 @@
 package com.popalay.spotty.data
 
 import android.content.Context
-import com.github.oliveiradev.lib.RxPhoto
-import com.github.oliveiradev.lib.Transformers
-import com.github.oliveiradev.lib.TypeRequest
+import android.net.Uri
+import com.mlsdev.rximagepicker.RxImagePicker
+import com.mlsdev.rximagepicker.Sources
+import rx.Observable
 
 class ImageManager(val context: Context) {
 
-    fun pickPhoto() = RxPhoto.request(context, TypeRequest.GALLERY)
-            .compose(Transformers.applySchedeulers())
+    fun pickPhoto(): Observable<Uri> = RxImagePicker.with(context).requestImage(Sources.GALLERY)
+            //.subscribeOn(Schedulers.io())
 
-    fun takePhoto() = RxPhoto.request(context, TypeRequest.CAMERA)
-            .compose(Transformers.applySchedeulers())
+    fun takePhoto(): Observable<Uri> = RxImagePicker.with(context).requestImage(Sources.CAMERA)
+            //.subscribeOn(Schedulers.io())
 }

@@ -22,6 +22,7 @@
 
         <ScrollView
             android:layout_width="match_parent"
+            android:scrollbars="none"
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
@@ -90,6 +91,7 @@
                         android:id="@+id/recycler"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:overScrollMode="never"
                         android:nestedScrollingEnabled="false"
                         android:padding="@dimen/normal" />
 

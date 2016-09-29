@@ -1,9 +1,9 @@
 package com.popalay.spotty.mvp.addspot
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
-import android.support.v7.widget.OrientationHelper
-import android.support.v7.widget.StaggeredGridLayoutManager
+import android.support.v7.widget.GridLayoutManager
 import android.view.*
 import com.github.rubensousa.bottomsheetbuilder.BottomSheetBuilder
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException
@@ -27,7 +27,10 @@ import com.popalay.spotty.mvp.base.BaseController
 import com.popalay.spotty.ui.ElasticDragDismissFrameLayout
 import com.popalay.spotty.ui.changehandlers.ScaleFadeChangeHandler
 import com.rohit.recycleritemclicksupport.RecyclerItemClickSupport
+import com.tbruyelle.rxpermissions.RxPermissions
+import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration
 import kotlinx.android.synthetic.main.controller_add_spot.view.*
+import rx.android.schedulers.AndroidSchedulers
 import javax.inject.Inject
 
 
@@ -114,12 +117,16 @@ class AddSpotController : AddSpotView, BaseController<AddSpotView, AddSpotPresen
 
     private fun initList(view: View) {
         with(view.recycler) {
-            layoutManager = StaggeredGridLayoutManager(3, OrientationHelper.HORIZONTAL)
+            layoutManager = GridLayoutManager(activity, 3)
             setHasFixedSize(true)
             addPhotosAdapter = AddSpotPhotosAdapter()
             adapter = addPhotosAdapter
+            view.recycler.addItemDecoration(HorizontalDividerItemDecoration.Builder(activity)
+                    .sizeResId(R.dimen.small)
+                    .color(0)
+                    .build())
             RecyclerItemClickSupport.addTo(this).setOnItemClickListener { recyclerView, i, view ->
-                if (i == 0) {
+                if (i == addPhotosAdapter.getDataSize()) {
                     openChoosePhotoDialog()
                 }
             }
@@ -127,15 +134,28 @@ class AddSpotController : AddSpotView, BaseController<AddSpotView, AddSpotPresen
     }
 
     private fun openChoosePhotoDialog() {
-        BottomSheetBuilder(activity, R.style.AppTheme_BottomSheetDialog)
-                .setMode(BottomSheetBuilder.MODE_LIST)
-                .setMenu(R.menu.add_photo_dialog)
-                .setItemClickListener {
-                    when (it.itemId) {
-                        R.id.gallery -> imageManager.pickPhoto()
-                        R.id.camera -> imageManager.takePhoto()
+        RxPermissions.getInstance(activity)
+                .request(Manifest.permission.READ_EXTERNAL_STORAGE)
+                .subscribe({ granted ->
+                    if (granted) {
+                        BottomSheetBuilder(activity, R.style.AppTheme_BottomSheetDialog)
+                                .setMode(BottomSheetBuilder.MODE_LIST)
+                                .setMenu(R.menu.add_photo_dialog)
+                                .setItemClickListener { getPhoto(it.itemId == R.id.camera) }
+                                .createDialog().show()
+                    } else {
+                        // Oups permission denied
                     }
-                }.createDialog().show()
+                })
+    }
+
+    private fun getPhoto(useCamera: Boolean) {
+        val observableUri = if (useCamera) imageManager.takePhoto() else imageManager.pickPhoto()
+        observableUri.observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    addPhotosAdapter.items.add(it)
+                    addPhotosAdapter.notifyDataSetChanged()
+                }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

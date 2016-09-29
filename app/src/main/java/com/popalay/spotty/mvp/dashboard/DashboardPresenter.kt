@@ -11,7 +11,6 @@ import com.popalay.spotty.mvp.base.presenter.RxPresenter
 import rx.android.schedulers.AndroidSchedulers
 import javax.inject.Inject
 
-
 class DashboardPresenter : RxPresenter<DashboardView>() {
 
     @Inject lateinit var locationManager: LocationManager

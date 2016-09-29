@@ -6,7 +6,6 @@ import android.content.res.Resources
 import android.support.annotation.StringRes
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
-import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -65,7 +64,7 @@ fun Controller.snackbar(view: View, @StringRes text: Int, duration: Int = Snackb
 
 
 fun ImageView.loadInCircle(imageUrl: String?) {
-    if (TextUtils.isEmpty(imageUrl)) {
+    if (imageUrl.isNullOrBlank()) {
         Picasso.with(context).load(R.mipmap.ic_launcher)
                 .transform(CircleTransform())
                 .into(this)
@@ -80,10 +79,8 @@ fun ImageView.loadInCircle(imageUrl: String?) {
 }
 
 fun ImageView.load(imageUrl: String?) {
-    if (TextUtils.isEmpty(imageUrl)) {
-        Picasso.with(context).load(R.color.gray)
-                .transform(CircleTransform())
-                .into(this)
+    if (imageUrl.isNullOrBlank()) {
+        Picasso.with(context).load(R.color.gray).into(this)
     } else {
         Picasso.with(context).load(imageUrl)
                 .fit()
