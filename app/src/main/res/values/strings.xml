@@ -19,4 +19,5 @@
     <string name="camera">Camera</string>
     <string name="gallery">Gallery</string>
     <string name="pick_from">Pick from…</string>
+    <string name="pick_up_to_4_photos">Pick up to 4 photos</string>
 </resources>

@@ -17,6 +17,7 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.popalay.spotty.App
+import com.popalay.spotty.MAX_PHOTOS_COUNT
 import com.popalay.spotty.R
 import com.popalay.spotty.adapters.AddSpotPhotosAdapter
 import com.popalay.spotty.data.ImageManager
@@ -125,9 +126,18 @@ class AddSpotController : AddSpotView, BaseController<AddSpotView, AddSpotPresen
                     .sizeResId(R.dimen.small)
                     .color(0)
                     .build())
+            //todo
             RecyclerItemClickSupport.addTo(this).setOnItemClickListener { recyclerView, i, view ->
                 if (i == addPhotosAdapter.getDataSize()) {
-                    openChoosePhotoDialog()
+                    if (addPhotosAdapter.getDataSize() < MAX_PHOTOS_COUNT) {
+                        openChoosePhotoDialog()
+                    } else {
+                        showSnackbar("You have max count of photos")
+                    }
+                }
+                if (i != addPhotosAdapter.getDataSize()) {
+                    addPhotosAdapter.selectedItems.add(addPhotosAdapter.getDataPosition(i))
+                    addPhotosAdapter.notifyDataSetChanged()
                 }
             }
         }
@@ -136,7 +146,7 @@ class AddSpotController : AddSpotView, BaseController<AddSpotView, AddSpotPresen
     private fun openChoosePhotoDialog() {
         RxPermissions.getInstance(activity)
                 .request(Manifest.permission.READ_EXTERNAL_STORAGE)
-                .subscribe({ granted ->
+                .subscribe { granted ->
                     if (granted) {
                         BottomSheetBuilder(activity, R.style.AppTheme_BottomSheetDialog)
                                 .setMode(BottomSheetBuilder.MODE_LIST)
@@ -146,7 +156,7 @@ class AddSpotController : AddSpotView, BaseController<AddSpotView, AddSpotPresen
                     } else {
                         // Oups permission denied
                     }
-                })
+                }
     }
 
     private fun getPhoto(useCamera: Boolean) {
@@ -155,6 +165,7 @@ class AddSpotController : AddSpotView, BaseController<AddSpotView, AddSpotPresen
                 .subscribe {
                     addPhotosAdapter.items.add(it)
                     addPhotosAdapter.notifyDataSetChanged()
+                    view.photos_count.text = "${addPhotosAdapter.getDataSize()}/$MAX_PHOTOS_COUNT"
                 }
     }
 
