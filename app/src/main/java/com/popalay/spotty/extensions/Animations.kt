@@ -33,9 +33,9 @@ fun ViewGroup.colapse() {
     val initialHeight = this.measuredHeight
     val a = object : Animation() {
         override fun applyTransformation(interpolatedTime: Float, t: Transformation) {
-            if(interpolatedTime == 1F){
+            if (interpolatedTime == 1F) {
                 this@colapse.visibility = View.GONE
-            }else{
+            } else {
                 this@colapse.layoutParams.height = initialHeight - (initialHeight * interpolatedTime).toInt()
                 this@colapse.requestLayout()
             }

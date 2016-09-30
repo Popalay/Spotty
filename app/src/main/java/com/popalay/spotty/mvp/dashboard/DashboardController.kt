@@ -140,7 +140,7 @@ class DashboardController : DashboardView, BaseController<DashboardView, Dashboa
 
     override fun startAddSpot() {
         parentController.router.pushController(RouterTransaction.with(AddSpotController())
-                .popChangeHandler(VerticalChangeHandler(false))
+                .popChangeHandler(VerticalChangeHandler())
                 .pushChangeHandler(VerticalChangeHandler()))
     }
 

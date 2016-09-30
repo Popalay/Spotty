@@ -3,6 +3,7 @@ package com.popalay.spotty.mvp.addspot
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.support.v7.widget.GridLayoutManager
 import android.view.*
 import com.github.rubensousa.bottomsheetbuilder.BottomSheetBuilder
@@ -16,6 +17,7 @@ import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.jakewharton.rxbinding.widget.RxTextView
 import com.popalay.spotty.App
 import com.popalay.spotty.MAX_PHOTOS_COUNT
 import com.popalay.spotty.R
@@ -23,7 +25,6 @@ import com.popalay.spotty.adapters.AddSpotPhotosAdapter
 import com.popalay.spotty.data.ImageManager
 import com.popalay.spotty.extensions.inflate
 import com.popalay.spotty.extensions.toPx
-import com.popalay.spotty.models.Spot
 import com.popalay.spotty.mvp.base.BaseController
 import com.popalay.spotty.ui.ElasticDragDismissFrameLayout
 import com.popalay.spotty.ui.changehandlers.ScaleFadeChangeHandler
@@ -32,6 +33,7 @@ import com.tbruyelle.rxpermissions.RxPermissions
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration
 import kotlinx.android.synthetic.main.controller_add_spot.view.*
 import rx.android.schedulers.AndroidSchedulers
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
@@ -68,6 +70,27 @@ class AddSpotController : AddSpotView, BaseController<AddSpotView, AddSpotPresen
         initUI(view)
     }
 
+    override fun onAttach(view: View) {
+        super.onAttach(view)
+        setListeners(view)
+    }
+
+    private fun setListeners(view: View) {
+        with(view) {
+            pick_place.setOnClickListener {
+                presenter.pickPlace()
+            }
+            RxTextView.afterTextChangeEvents(title)
+                    .debounce(750, TimeUnit.MILLISECONDS)
+                    .map { it.editable().trim().toString() }
+                    .subscribe { presenter.setTitle(it) }
+            RxTextView.afterTextChangeEvents(description)
+                    .debounce(750, TimeUnit.MILLISECONDS)
+                    .map { it.editable().trim().toString() }
+                    .subscribe { presenter.setDescription(it) }
+        }
+    }
+
     override fun createPresenter() = AddSpotPresenter()
 
     override fun onPrepareOptionsMenu(menu: Menu?) {
@@ -81,18 +104,11 @@ class AddSpotController : AddSpotView, BaseController<AddSpotView, AddSpotPresen
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             MENU_ACCEPT -> {
-                saveSpot()
+                presenter.saveSpot()
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
-    }
-
-    private fun saveSpot() {
-        val spot: Spot = Spot()
-        spot.title = view.title.text.toString().trim()
-        spot.description = view.description.text.toString().trim()
-        presenter.saveSpot(spot)
     }
 
     override fun onDestroyView(view: View) {
@@ -105,14 +121,11 @@ class AddSpotController : AddSpotView, BaseController<AddSpotView, AddSpotPresen
         setTitle("Spot creating")
         getSupportActionBar()?.setHomeButtonEnabled(true)
         initList(view)
-        with(view.toolbar) {
-            setNavigationIcon(R.drawable.ic_clear)
-            setNavigationOnClickListener {
+        with(view) {
+            toolbar.setNavigationIcon(R.drawable.ic_clear)
+            toolbar.setNavigationOnClickListener {
                 router.popCurrentController()
             }
-        }
-        view.pick_place.setOnClickListener {
-            presenter.pickPlace()
         }
     }
 
@@ -126,24 +139,16 @@ class AddSpotController : AddSpotView, BaseController<AddSpotView, AddSpotPresen
                     .sizeResId(R.dimen.small)
                     .color(0)
                     .build())
-            //todo
+            addPhotosAdapter.onRemoveItem = { presenter.removePhoto(it) }
             RecyclerItemClickSupport.addTo(this).setOnItemClickListener { recyclerView, i, view ->
                 if (i == addPhotosAdapter.getDataSize()) {
-                    if (addPhotosAdapter.getDataSize() < MAX_PHOTOS_COUNT) {
-                        openChoosePhotoDialog()
-                    } else {
-                        showSnackbar("You have max count of photos")
-                    }
-                }
-                if (i != addPhotosAdapter.getDataSize()) {
-                    addPhotosAdapter.selectedItems.add(addPhotosAdapter.getDataPosition(i))
-                    addPhotosAdapter.notifyDataSetChanged()
+                    presenter.requestAddPhoto()
                 }
             }
         }
     }
 
-    private fun openChoosePhotoDialog() {
+    override fun choosePhoto() {
         RxPermissions.getInstance(activity)
                 .request(Manifest.permission.READ_EXTERNAL_STORAGE)
                 .subscribe { granted ->
@@ -162,11 +167,7 @@ class AddSpotController : AddSpotView, BaseController<AddSpotView, AddSpotPresen
     private fun getPhoto(useCamera: Boolean) {
         val observableUri = if (useCamera) imageManager.takePhoto() else imageManager.pickPhoto()
         observableUri.observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    addPhotosAdapter.items.add(it)
-                    addPhotosAdapter.notifyDataSetChanged()
-                    view.photos_count.text = "${addPhotosAdapter.getDataSize()}/$MAX_PHOTOS_COUNT"
-                }
+                .subscribe { presenter.addPhoto(it) }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -180,7 +181,6 @@ class AddSpotController : AddSpotView, BaseController<AddSpotView, AddSpotPresen
     private fun updateMap(latLng: LatLng) {
         if (mapView != null) {
             view.content_layout.removeView(mapView)
-
         }
         val mapOptions = GoogleMapOptions()
                 .mapType(GoogleMap.MAP_TYPE_NORMAL)
@@ -188,11 +188,27 @@ class AddSpotController : AddSpotView, BaseController<AddSpotView, AddSpotPresen
                 .camera(CameraPosition.fromLatLngZoom(latLng, 16f))
         mapView = MapView(activity, mapOptions)
         mapView?.let {
+            it.setPadding(0, 0, 0, 8.toPx())
             view.content_layout.addView(it, 1)
             it.layoutParams.height = 200.toPx()
             it.onCreate(args)
-            it.getMapAsync { it.addMarker(MarkerOptions().position(latLng)) }
+            it.getMapAsync { map ->
+                map.uiSettings.isMapToolbarEnabled = false
+                map.addMarker(MarkerOptions().position(latLng))
+            }
         }
+    }
+
+    override fun showProgress() {
+        showProgressDialog()
+    }
+
+    override fun hideProgress() {
+        hideProgressDialog()
+    }
+
+    override fun updatePhotosCount(count: Int) {
+        view.photos_count.text = "${addPhotosAdapter.getDataSize()}/$MAX_PHOTOS_COUNT"
     }
 
     override fun showError(message: String) {
@@ -216,5 +232,13 @@ class AddSpotController : AddSpotView, BaseController<AddSpotView, AddSpotPresen
     override fun showPickedPlace(place: Place) {
         view.pick_place.text = "${place.name}, ${place.address}"
         updateMap(place.latLng)
+    }
+
+    override fun removePhoto(photo: Uri) {
+        addPhotosAdapter.remove(photo)
+    }
+
+    override fun addPhoto(photo: Uri) {
+        addPhotosAdapter.add(photo)
     }
 }

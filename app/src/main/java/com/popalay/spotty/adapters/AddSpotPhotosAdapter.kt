@@ -3,9 +3,8 @@ package com.popalay.spotty.adapters
 import android.net.Uri
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import android.widget.FrameLayout
-import com.pawegio.kandroid.d
 import com.popalay.spotty.R
+import com.popalay.spotty.extensions.toPx
 import kotlinx.android.synthetic.main.item_photo.view.*
 import java.util.*
 
@@ -13,7 +12,8 @@ class AddSpotPhotosAdapter : UltimateAdapter<ViewHolder>(), UltimateAdapter.Foot
 
     val items: MutableList<Uri> = ArrayList()
 
-    val selectedItems: MutableList<Int> = ArrayList()
+    var onRemoveItem: ((Uri) -> Unit)? = null
+    var selectedItem: Uri? = null
 
     init {
         setFooterVisibility(true)
@@ -24,6 +24,19 @@ class AddSpotPhotosAdapter : UltimateAdapter<ViewHolder>(), UltimateAdapter.Foot
         notifyDataSetChanged()
     }
 
+    fun add(uri: Uri) {
+        if (!items.contains(uri)) {
+            items.add(uri)
+            notifyDataSetChanged()
+        }
+    }
+
+    fun remove(uri: Uri) {
+        items.remove(uri)
+        selectedItem = null
+    }
+
+
     override fun getDataSize() = items.size
 
     override fun getDataViewResId(viewType: Int) = R.layout.item_photo
@@ -32,22 +45,30 @@ class AddSpotPhotosAdapter : UltimateAdapter<ViewHolder>(), UltimateAdapter.Foot
 
     override fun getDataViewType(dataPosition: Int) = 1
 
-    override fun getDataViewHolder(v: View, dataViewType: Int) = ViewHolder(v)
+    override fun getDataViewHolder(v: View, dataViewType: Int): ViewHolder {
+        val vh = ViewHolder(v)
+        vh.itemView.photo.setOnLongClickListener {
+            val item = getItemByViewHolder(vh, items)
+            selectedItem = item
+            notifyDataSetChanged()
+            true
+        }
+        vh.itemView.btn_remove.setOnClickListener {
+            items.remove(selectedItem)
+            onRemoveItem?.invoke(selectedItem!!)
+            selectedItem = null
+            notifyDataSetChanged()
+        }
+        return vh
+    }
 
-    //todo
     override fun bindDataVH(vh: ViewHolder, dataPosition: Int) {
         val item = items[dataPosition]
         with(vh.itemView) {
             photo.setImageURI(item.toString())
-            if (selectedItems.contains(dataPosition)) {
-                d("selected")
-                btn_remove.visibility = View.VISIBLE
-                val params = FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT,
-                        FrameLayout.LayoutParams.WRAP_CONTENT)
-                val margin = resources.getDimension(R.dimen.small).toInt()
-                params.setMargins(margin, margin, margin, margin)
-                photo.layoutParams = params
-            }
+            btn_remove.visibility = if (selectedItem == item) View.VISIBLE else View.GONE
+            val margin = if (selectedItem == item) 16.toPx() else 0
+            photo.setPadding(margin, margin, margin, margin)
         }
     }
 
