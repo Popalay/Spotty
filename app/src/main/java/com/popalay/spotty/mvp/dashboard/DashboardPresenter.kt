@@ -48,4 +48,8 @@ class DashboardPresenter : RxPresenter<DashboardView>() {
     fun addSpot() {
         view?.startAddSpot()
     }
+
+    fun openSpot(spot: Spot) {
+        view?.openSpot(spot)
+    }
 }

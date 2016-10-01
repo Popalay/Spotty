@@ -9,4 +9,5 @@ interface DashboardView : MvpView {
     fun setData(data: List<Spot>)
     fun setLocation(position: LatLng)
     fun startAddSpot()
+    fun openSpot(spot: Spot)
 }

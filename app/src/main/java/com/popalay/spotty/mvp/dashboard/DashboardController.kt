@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.*
 import com.bluelinelabs.conductor.RouterTransaction
+import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
 import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -18,6 +19,8 @@ import com.popalay.spotty.extensions.inflate
 import com.popalay.spotty.models.Spot
 import com.popalay.spotty.mvp.addspot.AddSpotController
 import com.popalay.spotty.mvp.base.BaseController
+import com.popalay.spotty.mvp.spotdetails.SpotDetailsController
+import com.rohit.recycleritemclicksupport.RecyclerItemClickSupport
 import com.tbruyelle.rxpermissions.RxPermissions
 import kotlinx.android.synthetic.main.controller_dashboard.view.*
 
@@ -70,6 +73,9 @@ class DashboardController : DashboardView, BaseController<DashboardView, Dashboa
             layoutManager = LinearLayoutManager(activity)
             adapter = spotAdapter
             presenter.loadData()
+            RecyclerItemClickSupport.addTo(this).setOnItemClickListener { recyclerView, i, view ->
+                presenter.openSpot(spotAdapter.items[i])
+            }
         }
     }
 
@@ -144,4 +150,9 @@ class DashboardController : DashboardView, BaseController<DashboardView, Dashboa
                 .pushChangeHandler(VerticalChangeHandler()))
     }
 
+    override fun openSpot(spot: Spot) {
+        parentController.router.pushController(RouterTransaction.with(SpotDetailsController(spot))
+                .popChangeHandler(FadeChangeHandler())
+                .pushChangeHandler(FadeChangeHandler()))
+    }
 }

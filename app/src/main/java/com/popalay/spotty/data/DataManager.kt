@@ -28,7 +28,7 @@ class DataManager(val firebaseAuth: FirebaseAuth, val firebaseDb: FirebaseDataba
         return Observable.from(photos)
                 .subscribeOn(Schedulers.io())
                 .flatMap { RxFirebaseStorage.putFile(photosRef.child("photo-${photos.indexOf(it)}"), it) }
-                .take(photos.size)
+                .skip(photos.size - 1)
                 .map { true }
 
     }
