@@ -8,6 +8,7 @@ import com.popalay.spotty.location.LocationManager
 import com.popalay.spotty.models.Spot
 import com.popalay.spotty.mvp.base.presenter.PresenterEvent
 import com.popalay.spotty.mvp.base.presenter.RxPresenter
+import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
 import javax.inject.Inject
 
@@ -32,7 +33,10 @@ class DashboardPresenter : RxPresenter<DashboardView>() {
         dataManager.getSpots()
                 .compose(bindUntilEvent<List<Spot>>(PresenterEvent.DETACH_VIEW))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { view?.setData(it) }
+                .doOnNext { view?.setData(it) }
+                .flatMap { Observable.from(it) }
+                .doOnNext { view?.showMarker(it) }
+                .subscribe()
     }
 
     fun getLastLocation() {

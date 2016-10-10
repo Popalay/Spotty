@@ -29,6 +29,7 @@ class SpotAdapter : UltimateAdapter<ViewHolder>() {
         val item = items[dataPosition]
         with(vh.itemView) {
             name.text = item.title
+            photo.setImageURI(item.photoUrls.firstOrNull())
         }
     }
 }

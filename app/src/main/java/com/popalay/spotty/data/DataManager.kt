@@ -10,6 +10,7 @@ import com.kelvinapps.rxfirebase.RxFirebaseStorage
 import com.popalay.spotty.models.Spot
 import rx.Observable
 import rx.schedulers.Schedulers
+import java.util.*
 
 
 class DataManager(val firebaseAuth: FirebaseAuth, val firebaseDb: FirebaseDatabase) {
@@ -22,13 +23,16 @@ class DataManager(val firebaseAuth: FirebaseAuth, val firebaseDb: FirebaseDataba
         val reference = firebaseDb.reference.child("spot").push()
         spot.authorEmail = getCurrentUser()?.email.orEmpty()
         spot.id = reference.key
-        reference.setValue(spot)
 
         val photosRef = FirebaseStorage.getInstance().reference.child("photos").child(spot.id)
+        val photoUrls: MutableList<String> = ArrayList()
         return Observable.from(photos)
                 .subscribeOn(Schedulers.io())
                 .flatMap { RxFirebaseStorage.putFile(photosRef.child("photo-${photos.indexOf(it)}"), it) }
+                .doOnNext { photoUrls.add(it.downloadUrl.toString()) }
                 .skip(photos.size - 1)
+                .doOnNext { spot.photoUrls = photoUrls }
+                .doOnNext { reference.setValue(spot) }
                 .map { true }
 
     }

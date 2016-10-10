@@ -2,7 +2,8 @@ package com.popalay.spotty.mvp.dashboard
 
 import android.Manifest
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.OrientationHelper
+import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.*
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
@@ -13,6 +14,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.MapsInitializer
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.popalay.spotty.R
 import com.popalay.spotty.adapters.SpotAdapter
 import com.popalay.spotty.extensions.inflate
@@ -70,7 +72,7 @@ class DashboardController : DashboardView, BaseController<DashboardView, Dashboa
     private fun initList(view: View) {
         with(view.recycler) {
             setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(activity)
+            layoutManager = StaggeredGridLayoutManager(2, OrientationHelper.VERTICAL)
             adapter = spotAdapter
             presenter.loadData()
             RecyclerItemClickSupport.addTo(this).setOnItemClickListener { recyclerView, i, view ->
@@ -142,6 +144,12 @@ class DashboardController : DashboardView, BaseController<DashboardView, Dashboa
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun showMarker(spot: Spot) {
+        map.addMarker(MarkerOptions()
+                .position(spot.position.toLatLng())
+                .title(spot.title))
     }
 
     override fun startAddSpot() {

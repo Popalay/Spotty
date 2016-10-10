@@ -1,6 +1,7 @@
 package com.popalay.spotty.activities
 
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.view.View
 import com.bluelinelabs.conductor.Conductor
 import com.bluelinelabs.conductor.Router
@@ -36,5 +37,9 @@ class MainActivity : BaseActivity() {
 
     override fun hideProgressDialog() {
         progress_bar.visibility = View.GONE
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
+        super.onCreate(savedInstanceState, persistentState)
     }
 }

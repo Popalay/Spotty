@@ -7,6 +7,7 @@ import com.popalay.spotty.models.Spot
 
 interface DashboardView : MvpView {
     fun setData(data: List<Spot>)
+    fun showMarker(spot: Spot)
     fun setLocation(position: LatLng)
     fun startAddSpot()
     fun openSpot(spot: Spot)

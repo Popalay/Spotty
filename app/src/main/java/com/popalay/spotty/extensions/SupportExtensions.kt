@@ -3,6 +3,9 @@ package com.popalay.spotty.extensions
 
 import android.app.Activity
 import android.content.res.Resources
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.support.annotation.StringRes
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
@@ -15,6 +18,7 @@ import com.popalay.spotty.R
 import com.popalay.spotty.ui.CircleTransform
 import com.rohitarya.picasso.facedetection.transformation.FaceCenterCrop
 import com.squareup.picasso.Picasso
+import com.squareup.picasso.Target
 
 fun ViewGroup.inflate(layoutId: Int, attachToRoot: Boolean = false): View {
     return LayoutInflater.from(context).inflate(layoutId, this, attachToRoot)
@@ -83,10 +87,35 @@ fun ImageView.load(imageUrl: String?) {
         Picasso.with(context).load(R.color.gray).into(this)
     } else {
         Picasso.with(context).load(imageUrl)
-                .fit()
                 .into(this)
     }
 }
+
+fun ImageView.loadToTarget(imageUrl: String?, callback: ((Bitmap) -> Unit)? = null) {
+    if (imageUrl.isNullOrBlank()) {
+        Picasso.with(context).load(R.color.gray).into(this)
+    } else {
+        Picasso.with(context).load(imageUrl)
+                .into(object : Target {
+
+                    override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
+                        this@loadToTarget.setImageDrawable(placeHolderDrawable)
+                    }
+
+                    override fun onBitmapFailed(errorDrawable: Drawable?) {
+                        this@loadToTarget.setImageDrawable(errorDrawable)
+                    }
+
+                    override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom) {
+                        this@loadToTarget.setImageBitmap(bitmap)
+                        callback?.invoke(bitmap)
+                    }
+
+                })
+    }
+}
+
+fun String.toUri() = Uri.parse(this)
 
 
 

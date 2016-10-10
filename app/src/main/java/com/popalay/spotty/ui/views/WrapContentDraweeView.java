@@ -18,14 +18,15 @@ import com.facebook.imagepipeline.image.ImageInfo;
 public class WrapContentDraweeView extends SimpleDraweeView {
 
     // we set a listener and update the view's aspect ratio depending on the loaded image
-    private final ControllerListener<ImageInfo> listener = new BaseControllerListener<ImageInfo>() {
+    private final ControllerListener listener = new BaseControllerListener<ImageInfo>() {
         @Override
-        public void onFinalImageSet(String id, @Nullable ImageInfo imageInfo, @Nullable Animatable animatable) {
+        public void onIntermediateImageSet(String id, @Nullable ImageInfo imageInfo) {
             updateViewSize(imageInfo);
         }
 
         @Override
-        public void onIntermediateImageSet(String id, @Nullable ImageInfo imageInfo) {
+        public void onFinalImageSet(String id, @Nullable ImageInfo imageInfo, @Nullable
+                Animatable animatable) {
             updateViewSize(imageInfo);
         }
     };
@@ -52,7 +53,7 @@ public class WrapContentDraweeView extends SimpleDraweeView {
 
     @Override
     public void setImageURI(Uri uri, Object callerContext) {
-        DraweeController controller = ((PipelineDraweeControllerBuilder) getControllerBuilder())
+        DraweeController controller = ((PipelineDraweeControllerBuilder)getControllerBuilder())
                 .setControllerListener(listener)
                 .setCallerContext(callerContext)
                 .setUri(uri)

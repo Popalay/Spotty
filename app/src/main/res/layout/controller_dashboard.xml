@@ -17,7 +17,7 @@
             android:layout_marginTop="@dimen/small"
             app:cardCornerRadius="0dp">
 
-            <com.google.android.gms.maps.MapView
+            <com.popalay.spotty.ui.views.ScrolledMapView
                 android:id="@+id/map_view"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
@@ -25,21 +25,12 @@
 
         </android.support.v7.widget.CardView>
 
-        <android.support.v7.widget.CardView
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/small"
-            android:layout_marginTop="@dimen/small"
-            app:cardCornerRadius="0dp">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycler"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false"
-                tools:listitem="@layout/item_spot" />
-
-        </android.support.v7.widget.CardView>
+            android:nestedScrollingEnabled="false"
+            tools:listitem="@layout/item_spot" />
 
     </LinearLayout>
 </ScrollView>
