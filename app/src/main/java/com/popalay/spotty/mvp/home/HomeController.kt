@@ -29,6 +29,7 @@ class HomeController : HomeView, BaseController<HomeView, HomePresenter>(), Draw
 
     init {
         setHasOptionsMenu(true)
+        retainViewMode = RetainViewMode.RETAIN_DETACH
     }
 
     override fun inflateView(inflater: LayoutInflater, container: ViewGroup): View {
@@ -63,7 +64,6 @@ class HomeController : HomeView, BaseController<HomeView, HomePresenter>(), Draw
 
     private fun initDrawer(view: View) {
         getSupportActionBar()?.setDisplayHomeAsUpEnabled(true)
-        getSupportActionBar()?.setDisplayShowHomeEnabled(true)
         toggle = ActionBarDrawerToggle(activity, view.drawer_layout, view.toolbar, R.string.drawer_open, R.string.drawer_close)
         toggle.isDrawerIndicatorEnabled = true
         view.drawer_layout.addDrawerListener(toggle)

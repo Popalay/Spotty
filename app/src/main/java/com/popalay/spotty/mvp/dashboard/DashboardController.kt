@@ -2,8 +2,7 @@ package com.popalay.spotty.mvp.dashboard
 
 import android.Manifest
 import android.os.Bundle
-import android.support.v7.widget.OrientationHelper
-import android.support.v7.widget.StaggeredGridLayoutManager
+import android.support.v7.widget.LinearLayoutManager
 import android.view.*
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
@@ -39,6 +38,7 @@ class DashboardController : DashboardView, BaseController<DashboardView, Dashboa
 
     init {
         setHasOptionsMenu(true)
+        retainViewMode = RetainViewMode.RETAIN_DETACH
     }
 
     override fun inflateView(inflater: LayoutInflater, container: ViewGroup): View {
@@ -72,7 +72,7 @@ class DashboardController : DashboardView, BaseController<DashboardView, Dashboa
     private fun initList(view: View) {
         with(view.recycler) {
             setHasFixedSize(true)
-            layoutManager = StaggeredGridLayoutManager(2, OrientationHelper.VERTICAL)
+            layoutManager = LinearLayoutManager(activity)
             adapter = spotAdapter
             presenter.loadData()
             RecyclerItemClickSupport.addTo(this).setOnItemClickListener { recyclerView, i, view ->

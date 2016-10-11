@@ -7,31 +7,29 @@
     android:clickable="true"
     android:foreground="?attr/selectableItemBackground"
     app:cardCornerRadius="0dp"
+    app:cardPreventCornerOverlap="true"
     app:cardUseCompatPadding="true">
 
-    <LinearLayout
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/photo"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:scaleType="centerCrop"
+        tools:background="@color/primary" />
+
+    <TextView
+        android:id="@+id/name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_gravity="bottom"
+        android:background="@color/accentTransparent"
+        android:elevation="4dp"
+        android:gravity="center_horizontal"
+        android:padding="@dimen/small"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+        android:textColor="@android:color/white"
+        tools:text="Sinka" />
 
-        <com.popalay.spotty.ui.views.WrapContentDraweeView
-            android:id="@+id/photo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/accent"
-            android:elevation="4dp"
-            android:gravity="center_horizontal"
-            android:padding="@dimen/small"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-            android:textColor="@android:color/white"
-            tools:text="Sinka" />
-
-    </LinearLayout>
 
 </android.support.v7.widget.CardView>
 
