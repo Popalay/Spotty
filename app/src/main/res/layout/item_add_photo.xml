@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:id="@+id/box"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="100dp"
+    android:layout_height="100dp"
+    android:layout_marginEnd="@dimen/small"
+    android:background="@drawable/border_bg">
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/photo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:foreground="?attr/selectableItemBackground"
+        app:roundedCornerRadius="2dp" />
+
+    <ImageView
+        android:id="@+id/btn_remove"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_gravity="end"
+        android:layout_margin="@dimen/small"
+        android:background="@drawable/round_bg"
+        android:clickable="true"
+        android:elevation="1dp"
+        android:foreground="?attr/selectableItemBackground"
+        android:padding="2dp"
+        android:src="@drawable/ic_clear"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+</FrameLayout>

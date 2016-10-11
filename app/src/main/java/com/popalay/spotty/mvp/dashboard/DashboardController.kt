@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.*
 import com.bluelinelabs.conductor.RouterTransaction
-import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
 import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -160,7 +159,7 @@ class DashboardController : DashboardView, BaseController<DashboardView, Dashboa
 
     override fun openSpot(spot: Spot) {
         parentController.router.pushController(RouterTransaction.with(SpotDetailsController(spot))
-                .popChangeHandler(FadeChangeHandler())
-                .pushChangeHandler(FadeChangeHandler()))
+                .popChangeHandler(VerticalChangeHandler())
+                .pushChangeHandler(VerticalChangeHandler()))
     }
 }

@@ -4,11 +4,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.popalay.spotty.R
+import com.popalay.spotty.adapters.PhotosPagerAdapter
 import com.popalay.spotty.extensions.inflate
 import com.popalay.spotty.models.Spot
 import com.popalay.spotty.mvp.base.BaseController
 import com.popalay.spotty.mvp.splash.SpotDetailsPresenter
-import kotlinx.android.synthetic.main.controller_add_spot.view.*
+import kotlinx.android.synthetic.main.controller_spot_details.view.*
 
 
 class SpotDetailsController() : SpotDetailsView, BaseController<SpotDetailsView, SpotDetailsPresenter>() {
@@ -39,6 +40,9 @@ class SpotDetailsController() : SpotDetailsView, BaseController<SpotDetailsView,
             toolbar.setNavigationOnClickListener {
                 router.popCurrentController()
             }
+            val adapter = PhotosPagerAdapter(spot.photoUrls)
+            photos_pager.adapter = adapter
+            indicator.setViewPager(photos_pager)
         }
     }
 

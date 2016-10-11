@@ -5,7 +5,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.popalay.spotty.R
 import com.popalay.spotty.extensions.toPx
-import kotlinx.android.synthetic.main.item_photo.view.*
+import kotlinx.android.synthetic.main.item_add_photo.view.*
 import java.util.*
 
 class AddSpotPhotosAdapter : UltimateAdapter<ViewHolder>(), UltimateAdapter.FooterInterface {
@@ -39,7 +39,7 @@ class AddSpotPhotosAdapter : UltimateAdapter<ViewHolder>(), UltimateAdapter.Foot
 
     override fun getDataSize() = items.size
 
-    override fun getDataViewResId(viewType: Int) = R.layout.item_photo
+    override fun getDataViewResId(viewType: Int) = R.layout.item_add_photo
 
     override fun getDataId(dataPosition: Int) = dataPosition.toLong()
 
