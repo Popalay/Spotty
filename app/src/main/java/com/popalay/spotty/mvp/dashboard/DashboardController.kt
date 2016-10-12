@@ -90,10 +90,10 @@ class DashboardController : DashboardView, BaseController<DashboardView, Dashboa
         map.isMyLocationEnabled = true
         try {
             MapsInitializer.initialize(this.activity)
+            presenter.getLastLocation()
         } catch (e: GooglePlayServicesNotAvailableException) {
             e.printStackTrace()
         }
-        presenter.getLastLocation()
     }
 
     override fun setLocation(position: LatLng) {

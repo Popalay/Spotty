@@ -17,6 +17,6 @@ class LocationManager(context: Context) {
     }
 
     fun getLastLocation(): Observable<Location> = locationManager
-            .getLastLocation(LocationManager.NETWORK_PROVIDER, LocationTime.OneHour())
+            .getLastLocation(LocationManager.PASSIVE_PROVIDER, LocationTime.OneHour())
 
 }
