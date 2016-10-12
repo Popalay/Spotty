@@ -117,5 +117,5 @@ fun ImageView.loadToTarget(imageUrl: String?, callback: ((Bitmap) -> Unit)? = nu
 
 fun String.toUri() = Uri.parse(this)
 
-
+fun Uri?.orEmpty(): Uri = this ?: Uri.EMPTY
 

@@ -39,7 +39,7 @@ class GoogleAuthProvider(val context: Context) : AuthProvider, GoogleApiClient.O
             account?.let {
                 val credential = GoogleAuthProvider.getCredential(account.idToken, null)
                 result(firebaseAuth.signInWithCredential(credential),
-                        User(account.displayName, account.photoUrl))
+                        User(displayName = account.displayName, email = account.email, profilePhoto = account.photoUrl))
             }
         }
     }

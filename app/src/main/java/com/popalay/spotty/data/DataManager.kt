@@ -8,6 +8,7 @@ import com.kelvinapps.rxfirebase.DataSnapshotMapper
 import com.kelvinapps.rxfirebase.RxFirebaseDatabase
 import com.kelvinapps.rxfirebase.RxFirebaseStorage
 import com.popalay.spotty.models.Spot
+import com.popalay.spotty.models.User
 import rx.Observable
 import rx.schedulers.Schedulers
 import java.util.*
@@ -35,6 +36,12 @@ class DataManager(val firebaseAuth: FirebaseAuth, val firebaseDb: FirebaseDataba
                 .doOnNext { reference.setValue(spot) }
                 .map { true }
 
+    }
+
+    //todo wth SOF Exception
+    fun saveUser(user: User) {
+        val reference = firebaseDb.reference.child("usedr").push()
+        reference.setValue(user)
     }
 
     fun getSpots(): Observable<MutableList<Spot>> {

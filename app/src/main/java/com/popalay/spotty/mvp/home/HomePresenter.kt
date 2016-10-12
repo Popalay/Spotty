@@ -29,7 +29,7 @@ class HomePresenter : RxPresenter<HomeView>() {
 
     private fun setUserInfo() {
         dataManager.getCurrentUser()?.let {
-            view?.setUserInfo(User(it.displayName, it.photoUrl))
+            view?.setUserInfo(User(displayName = it.displayName, profilePhoto = it.photoUrl))
         }
     }
 

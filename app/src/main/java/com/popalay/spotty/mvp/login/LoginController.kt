@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.HorizontalChangeHandler
-import com.pawegio.kandroid.d
 import com.popalay.spotty.R
 import com.popalay.spotty.auth.ProviderName
 import com.popalay.spotty.extensions.expand
@@ -54,7 +53,6 @@ class LoginController : LoginView, BaseController<LoginView, LoginPresenter>() {
     }
 
     override fun loginSuccessful() {
-        d("suucces")
         router.setRoot(RouterTransaction.with(HomeController())
                 .pushChangeHandler(HorizontalChangeHandler())
                 .popChangeHandler(HorizontalChangeHandler()))

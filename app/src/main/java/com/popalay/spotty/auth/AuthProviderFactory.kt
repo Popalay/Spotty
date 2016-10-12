@@ -10,7 +10,7 @@ enum class ProviderName(var providerName: String) {
     GOOGLE("google.com"), VK("password");
 
     companion object {
-        fun getByName(name: String): ProviderName? {
+        fun getByName(name: String?): ProviderName? {
             return values().find { TextUtils.equals(it.providerName, name) }
         }
     }

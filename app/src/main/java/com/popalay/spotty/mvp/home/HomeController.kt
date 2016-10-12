@@ -12,7 +12,6 @@ import com.mikepenz.materialdrawer.Drawer
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
 import com.popalay.spotty.R
 import com.popalay.spotty.extensions.inflate
-import com.popalay.spotty.extensions.loadInCircle
 import com.popalay.spotty.models.User
 import com.popalay.spotty.mvp.base.BaseController
 import com.popalay.spotty.mvp.dashboard.DashboardController
@@ -82,7 +81,7 @@ class HomeController : HomeView, BaseController<HomeView, HomePresenter>(), Draw
 
     override fun setUserInfo(user: User) {
         view.nav_view.getHeaderView(0).display_name.text = user.displayName
-        view.nav_view.getHeaderView(0).image_profile.loadInCircle(user.profilePhoto.toString())
+        view.nav_view.getHeaderView(0).image_profile.setImageURI(user.profilePhoto, activity)
     }
 
     override fun onItemClick(view: View?, position: Int, drawerItem: IDrawerItem<*, *>?): Boolean {

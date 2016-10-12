@@ -19,7 +19,7 @@ class AuthManager(private val authProviderFactory: AuthProviderFactory) {
     private var authProvider: AuthProvider? = null
 
     interface AuthListener {
-        fun authCompleted()
+        fun authCompleted(user: User)
         fun authFailed()
     }
 
@@ -68,8 +68,8 @@ class AuthManager(private val authProviderFactory: AuthProviderFactory) {
                     .subscribeOn(Schedulers.io())
                     .map {
                         it.providers?.let {
-                            d(it[0])
-                            authProviderFactory.getAuthProvider(ProviderName.getByName(it[0]))
+                            d("${it.firstOrNull()}")
+                            authProviderFactory.getAuthProvider(ProviderName.getByName(it.firstOrNull()))
                         }
                     }
                     .subscribe {
@@ -86,7 +86,7 @@ class AuthManager(private val authProviderFactory: AuthProviderFactory) {
                 .setPhotoUri(user.profilePhoto)
                 .build()
         firebaseAuth.currentUser?.updateProfile(profileUpdates)
-        authListeners.forEach(AuthListener::authCompleted)
+        authListeners.forEach { it.authCompleted(user) }
     }
 
     private fun authFailed() {

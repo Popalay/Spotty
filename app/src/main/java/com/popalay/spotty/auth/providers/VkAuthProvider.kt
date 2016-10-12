@@ -23,24 +23,24 @@ class VkAuthProvider(context: Context) : AuthProvider {
             override fun onResult(res: VKAccessToken) {
                 firebaseAuth.fetchProvidersForEmail(res.email).addOnCompleteListener {
                     if (it.result.providers == null) {
-                        getUserInfo {
+                        getUserInfo(res.email) {
                             result(firebaseAuth.createUserWithEmailAndPassword(res.email, res.userId), it)
                         }
                     } else {
-                        getUserInfo {
+                        getUserInfo(res.email) {
                             result(firebaseAuth.signInWithEmailAndPassword(res.email, res.userId), it)
                         }
                     }
                 }
             }
 
-            private fun getUserInfo(result: (User) -> Unit) {
+            private fun getUserInfo(email: String, result: (User) -> Unit) {
                 VKApi.users().get(VKParameters.from(VKApiConst.FIELDS,
                         "id,first_name,last_name,photo_100")).executeWithListener(object : VKRequest.VKRequestListener() {
                     override fun onComplete(response: VKResponse?) {
                         super.onComplete(response)
                         val vkUser = (response?.parsedModel as VKList<*>)[0] as VKApiUser
-                        val user = User(vkUser.toString(), Uri.parse(vkUser.photo_100))
+                        val user = User(displayName = vkUser.toString(), email = email, profilePhoto = Uri.parse(vkUser.photo_100))
                         result(user)
                     }
                 })

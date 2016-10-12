@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.popalay.spotty.ui.ElasticDragDismissFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:pv="http://schemas.android.com/tools"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -28,28 +28,52 @@
             android:scrollbars="none"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <android.support.v7.widget.CardView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="0dp">
+                android:orientation="vertical">
 
-                <com.github.ybq.parallaxviewpager.ParallaxViewPager
-                    android:id="@+id/photos_pager"
-                    android:layout_width="match_parent"
-                    android:layout_height="150dp"
-                    pv:mode="oneLine"
-                    pv:outset="62%"
-                    pv:shadow_width="30dp" />
-
-                <com.pixelcan.inkpageindicator.InkPageIndicator
-                    android:id="@+id/indicator"
+                <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:layout_marginBottom="@dimen/small"
-                    app:currentPageIndicatorColor="@color/accent" />
+                    app:cardCornerRadius="0dp">
 
-            </android.support.v7.widget.CardView>
+                    <com.github.ybq.parallaxviewpager.ParallaxViewPager
+                        android:id="@+id/photos_pager"
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp"
+                        app:mode="right_overlay"
+                        app:outset="62%"
+                        app:shadow_width="30dp" />
+
+                    <com.pixelcan.inkpageindicator.InkPageIndicator
+                        android:id="@+id/indicator"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_marginBottom="@dimen/small"
+                        app:currentPageIndicatorColor="@color/accent" />
+
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/small"
+                    app:contentPadding="@dimen/normal">
+
+                    <com.facebook.drawee.view.SimpleDraweeView
+                        android:id="@+id/image_profile"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        app:roundAsCircle="true"
+                        app:roundingBorderColor="@color/windowBackground"
+                        app:roundingBorderWidth="1dp"
+                        tools:background="@color/accent" />
+
+                </android.support.v7.widget.CardView>
+
+            </LinearLayout>
 
         </ScrollView>
 

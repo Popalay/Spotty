@@ -7,6 +7,7 @@ import com.popalay.spotty.R
 import com.popalay.spotty.adapters.PhotosPagerAdapter
 import com.popalay.spotty.extensions.inflate
 import com.popalay.spotty.models.Spot
+import com.popalay.spotty.models.User
 import com.popalay.spotty.mvp.base.BaseController
 import com.popalay.spotty.mvp.splash.SpotDetailsPresenter
 import kotlinx.android.synthetic.main.controller_spot_details.view.*
@@ -24,7 +25,7 @@ class SpotDetailsController() : SpotDetailsView, BaseController<SpotDetailsView,
         this.spot = spot
     }
 
-    override fun createPresenter() = SpotDetailsPresenter()
+    override fun createPresenter() = SpotDetailsPresenter(spot)
 
     override fun onViewBound(view: View) {
         super.onViewBound(view)
@@ -33,17 +34,25 @@ class SpotDetailsController() : SpotDetailsView, BaseController<SpotDetailsView,
 
     private fun initUI(view: View) {
         setSupportActionBar(view.toolbar)
-        setTitle(spot.title)
         getSupportActionBar()?.setHomeButtonEnabled(true)
         with(view) {
             toolbar.setNavigationIcon(R.drawable.ic_back)
             toolbar.setNavigationOnClickListener {
                 router.popCurrentController()
             }
-            val adapter = PhotosPagerAdapter(spot.photoUrls)
+        }
+    }
+
+    override fun setBaseInfo(spot: Spot) {
+        setTitle(spot.title)
+        val adapter = PhotosPagerAdapter(spot.photoUrls)
+        with(view) {
             photos_pager.adapter = adapter
             indicator.setViewPager(photos_pager)
         }
     }
 
+    override fun setAuthor(user: User) {
+        view.image_profile.setImageURI(user.profilePhoto, activity)
+    }
 }
