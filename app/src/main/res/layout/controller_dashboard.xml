@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fillViewport="true"
     android:scrollbars="none">
 
     <LinearLayout
@@ -28,8 +29,19 @@
             android:id="@+id/recycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/small"
             android:nestedScrollingEnabled="false"
             tools:listitem="@layout/item_spot" />
 
+        <TextView
+            android:id="@+id/empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="No Spots Yet"
+            android:textAllCaps="true"
+            android:visibility="gone" />
+
     </LinearLayout>
+
 </ScrollView>

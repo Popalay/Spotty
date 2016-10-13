@@ -12,13 +12,12 @@ import java.util.*
 
 abstract class RxPresenter<V : MvpView> : MvpBasePresenter<V>(), PresenterLifecycleProvider {
 
-    private lateinit var lifecycleSubject: BehaviorSubject<PresenterEvent>
+    private val lifecycleSubject: BehaviorSubject<PresenterEvent>
 
     private var lifecycleListeners: MutableList<LifecycleListener<V>> = ArrayList()
 
     init {
         lifecycleSubject = PresenterLifecycleSubjectHelper.create(this)
-
     }
 
     fun addLifecycleListener(lifecycleListener: LifecycleListener<V>) {
