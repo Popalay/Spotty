@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             app:cardCornerRadius="0dp">
 
-            <com.popalay.spotty.ui.views.ScrolledMapView
+            <com.popalay.spotty.widgets.ScrolledMapView
                 android:id="@+id/map_view"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
@@ -26,21 +26,25 @@
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler"
+            android:id="@+id/contentView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/small"
             android:nestedScrollingEnabled="false"
             tools:listitem="@layout/item_spot" />
 
+        <ProgressBar
+            android:id="@+id/loadingView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center" />
+
         <TextView
-            android:id="@+id/empty"
+            android:id="@+id/errorView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="No Spots Yet"
-            android:textAllCaps="true"
-            android:visibility="gone" />
+            android:textAllCaps="true" />
 
     </LinearLayout>
 

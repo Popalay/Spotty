@@ -4,7 +4,7 @@ import android.support.v4.view.PagerAdapter
 import android.view.View
 import android.view.ViewGroup
 import com.popalay.spotty.R
-import com.popalay.spotty.extensions.inflate
+import com.popalay.spotty.utils.extensions.inflate
 import kotlinx.android.synthetic.main.item_photo.view.*
 
 internal class PhotosPagerAdapter(val photos: List<String>) : PagerAdapter() {

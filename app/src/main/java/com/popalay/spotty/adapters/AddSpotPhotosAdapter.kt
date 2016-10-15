@@ -4,7 +4,7 @@ import android.net.Uri
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.popalay.spotty.R
-import com.popalay.spotty.extensions.toPx
+import com.popalay.spotty.utils.extensions.toPx
 import kotlinx.android.synthetic.main.item_add_photo.view.*
 import java.util.*
 

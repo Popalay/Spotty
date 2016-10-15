@@ -1,7 +1,7 @@
 package com.popalay.spotty.di
 
-import com.popalay.spotty.mvp.home.HomePresenter
-import com.popalay.spotty.mvp.login.LoginPresenter
+import com.popalay.spotty.ui.home.HomePresenter
+import com.popalay.spotty.ui.login.LoginPresenter
 import dagger.Subcomponent
 
 @SessionScope

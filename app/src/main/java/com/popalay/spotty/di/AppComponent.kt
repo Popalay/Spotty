@@ -1,10 +1,10 @@
 package com.popalay.spotty.di
 
-import com.popalay.spotty.mvp.addspot.AddSpotController
-import com.popalay.spotty.mvp.addspot.AddSpotPresenter
-import com.popalay.spotty.mvp.dashboard.DashboardPresenter
-import com.popalay.spotty.mvp.splash.SplashPresenter
-import com.popalay.spotty.mvp.splash.SpotDetailsPresenter
+import com.popalay.spotty.ui.addspot.AddSpotController
+import com.popalay.spotty.ui.addspot.AddSpotPresenter
+import com.popalay.spotty.ui.dashboard.DashboardPresenter
+import com.popalay.spotty.ui.splash.SplashPresenter
+import com.popalay.spotty.ui.splash.SpotDetailsPresenter
 import dagger.Component
 import javax.inject.Singleton
 
