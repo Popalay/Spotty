@@ -5,6 +5,7 @@ import com.popalay.spotty.ui.addspot.AddSpotPresenter
 import com.popalay.spotty.ui.dashboard.DashboardPresenter
 import com.popalay.spotty.ui.splash.SplashPresenter
 import com.popalay.spotty.ui.splash.SpotDetailsPresenter
+import com.popalay.spotty.ui.spotsmap.SpotsMapPresenter
 import dagger.Component
 import javax.inject.Singleton
 
@@ -17,4 +18,5 @@ interface AppComponent {
     fun inject(addSpotPresenter: AddSpotPresenter)
     fun inject(addSpotController: AddSpotController)
     fun inject(spotDetailsPresenter: SpotDetailsPresenter)
+    fun inject(spotMapPresenter: SpotsMapPresenter)
 }

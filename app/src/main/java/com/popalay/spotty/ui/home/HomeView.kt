@@ -8,6 +8,7 @@ interface HomeView : MvpView {
 
     fun startSignIn()
     fun setUserInfo(user: User)
+    fun openDashboard()
     fun openMap()
     fun openLikedSpots()
     fun openMySpots()

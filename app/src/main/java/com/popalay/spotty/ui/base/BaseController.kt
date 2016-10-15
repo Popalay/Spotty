@@ -1,5 +1,6 @@
 package com.popalay.spotty.ui.base
 
+import android.support.annotation.StringRes
 import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
 import android.view.View
@@ -30,6 +31,10 @@ abstract class BaseController<V : MvpView, P : MvpPresenter<V>>() : MvpControlle
 
     protected fun setTitle(title: String) {
         getBaseActivity().supportActionBar?.title = title
+    }
+
+    protected fun setTitle(@StringRes title: Int) {
+        getBaseActivity().supportActionBar?.setTitle(title)
     }
 
     protected abstract fun inflateView(inflater: LayoutInflater, container: ViewGroup): View

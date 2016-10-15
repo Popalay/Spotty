@@ -1,19 +1,10 @@
 package com.popalay.spotty.ui.dashboard
 
-import android.Manifest
-import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.*
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.MapView
-import com.google.android.gms.maps.MapsInitializer
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
 import com.popalay.spotty.R
 import com.popalay.spotty.adapters.SpotAdapter
 import com.popalay.spotty.models.Spot
@@ -22,7 +13,6 @@ import com.popalay.spotty.ui.base.BaseLceController
 import com.popalay.spotty.ui.spotdetails.SpotDetailsController
 import com.popalay.spotty.utils.extensions.inflate
 import com.rohit.recycleritemclicksupport.RecyclerItemClickSupport
-import com.tbruyelle.rxpermissions.RxPermissions
 import kotlinx.android.synthetic.main.controller_dashboard.view.*
 
 
@@ -30,9 +20,6 @@ class DashboardController : DashboardView, BaseLceController<RecyclerView, List<
 
     private val MENU_ADD: Int = Menu.FIRST
     private val MENU_SEARCH: Int = MENU_ADD + 1
-
-    private lateinit var mapView: MapView
-    private lateinit var map: GoogleMap
 
     private val spotAdapter: SpotAdapter = SpotAdapter()
 
@@ -47,26 +34,13 @@ class DashboardController : DashboardView, BaseLceController<RecyclerView, List<
 
     override fun onViewBound(view: View) {
         super.onViewBound(view)
-        mapView = view.map_view
-        mapView.onCreate(args)
+        initUI(view)
     }
 
     override fun createPresenter() = DashboardPresenter()
 
     private fun initUI(view: View) {
         initList(view)
-        RxPermissions.getInstance(activity)
-                .request(Manifest.permission.ACCESS_FINE_LOCATION)
-                .subscribe({ granted ->
-                    if (granted) {
-                        mapView.getMapAsync {
-                            map = it
-                            initMap()
-                        }
-                    } else {
-                        // Oups permission denied
-                    }
-                })
     }
 
     private fun initList(view: View) {
@@ -74,48 +48,10 @@ class DashboardController : DashboardView, BaseLceController<RecyclerView, List<
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(activity)
             adapter = spotAdapter
-            presenter.loadData()
             RecyclerItemClickSupport.addTo(this).setOnItemClickListener { recyclerView, i, view ->
                 presenter.openSpot(spotAdapter.items[i])
             }
         }
-    }
-
-    private fun initMap() {
-        map.uiSettings.isMyLocationButtonEnabled = true
-        map.isMyLocationEnabled = true
-        try {
-            MapsInitializer.initialize(this.activity)
-            presenter.getLastLocation()
-        } catch (e: GooglePlayServicesNotAvailableException) {
-            e.printStackTrace()
-        }
-    }
-
-    override fun setLocation(position: LatLng) {
-        val cameraUpdate = CameraUpdateFactory.newLatLngZoom(position, 15f)
-        map.animateCamera(cameraUpdate)
-    }
-
-    override fun onAttach(view: View) {
-        super.onAttach(view)
-        initUI(view)
-        mapView.onResume()
-    }
-
-    override fun onDetach(view: View) {
-        super.onDetach(view)
-        mapView.onPause()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        mapView.onDestroy()
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        mapView.onSaveInstanceState(outState)
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?) {
@@ -139,12 +75,6 @@ class DashboardController : DashboardView, BaseLceController<RecyclerView, List<
             }
             else -> super.onOptionsItemSelected(item)
         }
-    }
-
-    override fun showMarker(spot: Spot) {
-        map.addMarker(MarkerOptions()
-                .position(spot.position.toLatLng())
-                .title(spot.title))
     }
 
     override fun startAddSpot() {

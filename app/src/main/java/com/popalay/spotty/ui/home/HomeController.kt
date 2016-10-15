@@ -1,5 +1,6 @@
 package com.popalay.spotty.ui.home
 
+import android.support.design.widget.NavigationView
 import android.support.v7.app.ActionBarDrawerToggle
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -8,20 +9,19 @@ import android.view.ViewGroup
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.HorizontalChangeHandler
-import com.mikepenz.materialdrawer.Drawer
-import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
 import com.popalay.spotty.R
 import com.popalay.spotty.models.User
 import com.popalay.spotty.ui.base.BaseController
 import com.popalay.spotty.ui.dashboard.DashboardController
 import com.popalay.spotty.ui.login.LoginController
+import com.popalay.spotty.ui.spotsmap.SpotsMapController
 import com.popalay.spotty.utils.extensions.inflate
 import kotlinx.android.synthetic.main.content_home.view.*
 import kotlinx.android.synthetic.main.controller_home.view.*
 import kotlinx.android.synthetic.main.footer_drawer.view.*
 import kotlinx.android.synthetic.main.header_drawer.view.*
 
-class HomeController : HomeView, BaseController<HomeView, HomePresenter>(), Drawer.OnDrawerItemClickListener {
+class HomeController : HomeView, BaseController<HomeView, HomePresenter>(), NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var childRouter: Router
     private lateinit var toggle: ActionBarDrawerToggle
@@ -45,7 +45,7 @@ class HomeController : HomeView, BaseController<HomeView, HomePresenter>(), Draw
 
     private fun initUI(view: View) {
         setSupportActionBar(view.toolbar)
-        setTitle(activity.getString(R.string.app_name))
+        setTitle(R.string.app_name)
         setDefaultController(view)
         initDrawer(view)
     }
@@ -53,7 +53,7 @@ class HomeController : HomeView, BaseController<HomeView, HomePresenter>(), Draw
     private fun setDefaultController(view: View) {
         childRouter = getChildRouter(view.home_container, null)
         if (!childRouter.hasRootController()) {
-            childRouter.setRoot(RouterTransaction.with(DashboardController()))
+            openDashboard()
         }
     }
 
@@ -66,6 +66,7 @@ class HomeController : HomeView, BaseController<HomeView, HomePresenter>(), Draw
         toggle = ActionBarDrawerToggle(activity, view.drawer_layout, view.toolbar, R.string.drawer_open, R.string.drawer_close)
         toggle.isDrawerIndicatorEnabled = true
         view.drawer_layout.addDrawerListener(toggle)
+        view.nav_view.setNavigationItemSelectedListener(this)
         toggle.syncState()
 
         view.logout.setOnClickListener {
@@ -84,8 +85,8 @@ class HomeController : HomeView, BaseController<HomeView, HomePresenter>(), Draw
         view.nav_view.getHeaderView(0).image_profile.setImageURI(user.profilePhoto, activity)
     }
 
-    override fun onItemClick(view: View?, position: Int, drawerItem: IDrawerItem<*, *>?): Boolean {
-        presenter.open(position)
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        presenter.open(item.itemId)
         closeDrawer()
         return true
     }
@@ -94,7 +95,12 @@ class HomeController : HomeView, BaseController<HomeView, HomePresenter>(), Draw
         view.drawer_layout.closeDrawers()
     }
 
+    override fun openDashboard() {
+        childRouter.setRoot(RouterTransaction.with(DashboardController()))
+    }
+
     override fun openMap() {
+        childRouter.setRoot(RouterTransaction.with(SpotsMapController()))
     }
 
     override fun openLikedSpots() {

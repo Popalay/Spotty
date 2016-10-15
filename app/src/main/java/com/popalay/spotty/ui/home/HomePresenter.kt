@@ -1,6 +1,7 @@
 package com.popalay.spotty.ui.home
 
 import com.popalay.spotty.App
+import com.popalay.spotty.R
 import com.popalay.spotty.auth.AuthManager
 import com.popalay.spotty.data.DataManager
 import com.popalay.spotty.models.User
@@ -38,7 +39,10 @@ class HomePresenter : RxPresenter<HomeView>() {
         authManager.get().signOut()
     }
 
-    fun open(position: Int) {
-
+    fun open(itemId: Int) {
+        when (itemId) {
+            R.id.dashboard -> view?.openDashboard()
+            R.id.map -> view?.openMap()
+        }
     }
 }
