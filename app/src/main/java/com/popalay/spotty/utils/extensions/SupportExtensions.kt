@@ -4,11 +4,13 @@ package com.popalay.spotty.utils.extensions
 import android.app.Activity
 import android.content.res.Resources
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.support.annotation.StringRes
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
+import android.support.v7.graphics.Palette
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -115,7 +117,17 @@ fun ImageView.loadToTarget(imageUrl: String?, callback: ((Bitmap) -> Unit)? = nu
     }
 }
 
-fun String.toUri() = Uri.parse(this)
+fun String.toUri(): Uri = Uri.parse(this)
 
 fun Uri?.orEmpty(): Uri = this ?: Uri.EMPTY
+
+fun Bitmap?.paletteColors(result: (bgColor: Int, textColor: Int) -> Unit) {
+    if (this == null) return
+    Palette.from(this).generate {
+        val swatch = it.dominantSwatch
+        val bgColor = swatch?.rgb
+        val textColor = swatch?.titleTextColor
+        result(bgColor ?: Color.BLUE, textColor ?: Color.WHITE)
+    }
+}
 

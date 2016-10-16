@@ -2,6 +2,7 @@ package com.popalay.spotty.ui
 
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager
 import com.bluelinelabs.conductor.Conductor
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
@@ -32,10 +33,12 @@ class MainActivity : BaseActivity() {
     }
 
     override fun showProgressDialog() {
+        window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
         loadingView.visibility = View.VISIBLE
     }
 
     override fun hideProgressDialog() {
+        window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         loadingView.visibility = View.GONE
     }
 }

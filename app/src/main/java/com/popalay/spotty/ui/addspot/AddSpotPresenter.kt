@@ -60,7 +60,8 @@ class AddSpotPresenter : RxPresenter<AddSpotView>() {
 
     fun setPickedPlace(place: Place) {
         spot.apply {
-            address = "${place.name}, ${place.address}"
+            placeName = place.name.toString()
+            address = place.address.toString()
             position = Position(place.latLng.latitude, place.latLng.longitude)
         }
         view?.showPickedPlace(place)
