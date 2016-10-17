@@ -53,6 +53,7 @@ class SpotDetailsController() : SpotDetailsView, BaseController<SpotDetailsView,
     }
 
     override fun setAuthor(user: User) {
-        view.image_profile.setImageURI(user.profilePhoto, activity)
+        view.authorProfileImage.setImageURI(user.profilePhoto, activity)
+        view.authorName.text = user.displayName
     }
 }

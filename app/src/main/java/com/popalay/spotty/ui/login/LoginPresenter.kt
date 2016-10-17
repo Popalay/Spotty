@@ -39,8 +39,8 @@ class LoginPresenter : RxPresenter<LoginView>(), AuthManager.AuthListener {
         authManager.signIn(providerName, controller)
     }
 
-    override fun authCompleted(user: User) {
-        //dataManager.saveUser(user)
+    override fun authCompleted(userId:String, user: User) {
+        dataManager.saveUser(userId, user)
         view?.hideProgress()
         view?.loginSuccessful()
     }

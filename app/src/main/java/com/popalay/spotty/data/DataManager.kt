@@ -16,13 +16,15 @@ import java.util.*
 
 class DataManager(val firebaseAuth: FirebaseAuth, val firebaseDb: FirebaseDatabase) {
 
-    fun getCurrentUser() = firebaseAuth.currentUser
+    fun getCurrentUser(): Observable<User> = Observable.just(firebaseAuth.currentUser)
+            .subscribeOn(Schedulers.io())
+            .map { User(it?.displayName, it?.email, it?.photoUrl.toString()) }
 
     fun isLogged() = firebaseAuth.currentUser != null
 
     fun saveSpot(spot: Spot, photos: MutableList<Uri>): Observable<Boolean> {
         val reference = firebaseDb.reference.child("spot").push()
-        spot.authorEmail = getCurrentUser()?.email.orEmpty()
+        spot.authorId = firebaseAuth.currentUser?.uid.orEmpty()
         spot.id = reference.key
 
         val photosRef = FirebaseStorage.getInstance().reference.child("photos").child(spot.id)
@@ -38,15 +40,20 @@ class DataManager(val firebaseAuth: FirebaseAuth, val firebaseDb: FirebaseDataba
 
     }
 
-    //todo wth SOF Exception
-    fun saveUser(user: User) {
-        val reference = firebaseDb.reference.child("usedr").push()
+    fun saveUser(userId: String, user: User) {
+        val reference = firebaseDb.reference.child("user").child(userId)
         reference.setValue(user)
     }
 
     fun getSpots(): Observable<MutableList<Spot>> {
         return RxFirebaseDatabase.observeValueEvent(firebaseDb.reference.child("spot"),
                 DataSnapshotMapper.listOf(Spot::class.java))
+                .subscribeOn(Schedulers.io())
+    }
+
+    fun getUser(userId: String): Observable<User> {
+        return RxFirebaseDatabase.observeValueEvent(firebaseDb.reference.child("user").child(userId),
+                DataSnapshotMapper.of(User::class.java))
                 .subscribeOn(Schedulers.io())
     }
 }

@@ -54,25 +54,19 @@
 
             <TextView
                 android:id="@+id/commentsCount"
+                style="@style/CardActionItem"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/normal"
-                android:drawablePadding="@dimen/small"
                 android:drawableStart="@drawable/ic_comments_white"
-                android:gravity="center"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
-                android:textColor="@color/white"
                 tools:text="100" />
 
             <TextView
                 android:id="@+id/likesCount"
+                style="@style/CardActionItem"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawablePadding="@dimen/small"
                 android:drawableStart="@drawable/ic_heart_white"
-                android:gravity="center"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
-                android:textColor="@color/white"
                 tools:text="100" />
 
         </LinearLayout>

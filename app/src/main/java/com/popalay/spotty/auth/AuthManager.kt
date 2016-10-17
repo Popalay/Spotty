@@ -10,6 +10,7 @@ import com.kelvinapps.rxfirebase.RxFirebaseAuth
 import com.pawegio.kandroid.d
 import com.popalay.spotty.auth.providers.AuthProvider
 import com.popalay.spotty.models.User
+import com.popalay.spotty.utils.extensions.toUri
 import rx.schedulers.Schedulers
 import java.util.*
 
@@ -19,7 +20,7 @@ class AuthManager(private val authProviderFactory: AuthProviderFactory) {
     private var authProvider: AuthProvider? = null
 
     interface AuthListener {
-        fun authCompleted(user: User)
+        fun authCompleted(userId: String, user: User)
         fun authFailed()
     }
 
@@ -83,10 +84,13 @@ class AuthManager(private val authProviderFactory: AuthProviderFactory) {
     private fun authCompleted(user: User) {
         val profileUpdates = UserProfileChangeRequest.Builder()
                 .setDisplayName(user.displayName)
-                .setPhotoUri(user.profilePhoto)
+                .setPhotoUri(user.profilePhoto.toUri())
                 .build()
-        firebaseAuth.currentUser?.updateProfile(profileUpdates)
-        authListeners.forEach { it.authCompleted(user) }
+        firebaseAuth.currentUser?.let { firebaseUser ->
+            firebaseUser.updateProfile(profileUpdates)
+            authListeners.forEach { it.authCompleted(firebaseUser.uid, user) }
+
+        }
     }
 
     private fun authFailed() {

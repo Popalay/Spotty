@@ -4,9 +4,9 @@ import com.popalay.spotty.App
 import com.popalay.spotty.R
 import com.popalay.spotty.auth.AuthManager
 import com.popalay.spotty.data.DataManager
-import com.popalay.spotty.models.User
 import com.popalay.spotty.ui.base.presenter.RxPresenter
 import dagger.Lazy
+import rx.android.schedulers.AndroidSchedulers
 import javax.inject.Inject
 
 
@@ -29,9 +29,9 @@ class HomePresenter : RxPresenter<HomeView>() {
     }
 
     private fun setUserInfo() {
-        dataManager.getCurrentUser()?.let {
-            view?.setUserInfo(User(displayName = it.displayName, profilePhoto = it.photoUrl))
-        }
+        dataManager.getCurrentUser()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { view?.setUserInfo(it) }
     }
 
     fun signOut() {

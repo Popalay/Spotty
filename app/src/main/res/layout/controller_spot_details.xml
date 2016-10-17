@@ -56,20 +56,44 @@
 
                 </android.support.v7.widget.CardView>
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="@dimen/small"
+                    android:text="Author"
+                    android:textAllCaps="true"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead" />
+
                 <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/small"
+                    android:layout_marginBottom="@dimen/small"
                     app:contentPadding="@dimen/normal">
 
-                    <com.facebook.drawee.view.SimpleDraweeView
-                        android:id="@+id/image_profile"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        app:roundAsCircle="true"
-                        app:roundingBorderColor="@color/windowBackground"
-                        app:roundingBorderWidth="1dp"
-                        tools:background="@color/accent" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <com.facebook.drawee.view.SimpleDraweeView
+                            android:id="@+id/authorProfileImage"
+                            android:layout_width="56dp"
+                            android:layout_height="56dp"
+                            android:layout_marginEnd="@dimen/normal"
+                            app:roundAsCircle="true"
+                            app:roundingBorderColor="@color/windowBackground"
+                            app:roundingBorderWidth="1dp"
+                            tools:background="@color/accent" />
+
+                        <TextView
+                            android:id="@+id/authorName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                            tools:text="ddsfsfsfsfsfsf" />
+
+                    </LinearLayout>
 
                 </android.support.v7.widget.CardView>
 

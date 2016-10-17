@@ -9,7 +9,7 @@ data class Spot(var id: String = "",
                 var placeName: String = "",
                 var address: String = "",
                 var position: Position = Position(),
-                var authorEmail: String = "",
+                var authorId: String = "",
                 var photoUrls: List<String> = emptyList(),
                 var counts: Counts = Counts()
 )

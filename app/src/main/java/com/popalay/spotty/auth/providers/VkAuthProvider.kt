@@ -2,7 +2,6 @@ package com.popalay.spotty.auth.providers
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import com.bluelinelabs.conductor.Controller
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
@@ -40,7 +39,9 @@ class VkAuthProvider(context: Context) : AuthProvider {
                     override fun onComplete(response: VKResponse?) {
                         super.onComplete(response)
                         val vkUser = (response?.parsedModel as VKList<*>)[0] as VKApiUser
-                        val user = User(displayName = vkUser.toString(), email = email, profilePhoto = Uri.parse(vkUser.photo_100))
+                        val user = User(displayName = vkUser.toString(),
+                                email = email,
+                                profilePhoto = vkUser.photo_100)
                         result(user)
                     }
                 })

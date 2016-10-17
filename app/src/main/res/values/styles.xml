@@ -35,4 +35,13 @@
         <item name="behavior_skipCollapsed">true</item>
     </style>
 
+    <style name="CardActionItem">
+        <item name="android:drawablePadding">@dimen/small</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textAppearance">@style/Base.TextAppearance.AppCompat.Body2</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:clickable">true</item>
+        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+    </style>
+
 </resources>
