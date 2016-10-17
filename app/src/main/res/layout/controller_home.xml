@@ -16,18 +16,18 @@
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        app:itemTextColor="@color/gray"
-        app:itemIconTint="@color/accent"
-        app:itemTextAppearance="@style/NavigationItemStyle"
         android:layout_gravity="start"
         app:headerLayout="@layout/header_drawer"
-        app:menu="@menu/drawer" >
+        app:itemIconTint="@color/accent"
+        app:itemTextAppearance="@style/NavigationItemStyle"
+        app:itemTextColor="@color/gray"
+        app:menu="@menu/drawer">
 
         <include
+            layout="@layout/footer_drawer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            layout="@layout/footer_drawer"/>
+            android:layout_gravity="bottom" />
 
     </android.support.design.widget.NavigationView>
 

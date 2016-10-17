@@ -14,6 +14,7 @@ import android.support.v7.graphics.Palette
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.ImageView
 import com.bluelinelabs.conductor.Controller
 import com.popalay.spotty.R
@@ -130,4 +131,24 @@ fun Bitmap?.paletteColors(result: (bgColor: Int, textColor: Int) -> Unit) {
         result(bgColor ?: Color.BLUE, textColor ?: Color.WHITE)
     }
 }
+
+fun Activity.setTranslucentStatusbar(translucent: Boolean) {
+    val window = window
+
+    if (translucent) {
+        // Enable status bar translucency (requires API 19)
+        window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+
+    } else {
+        // Disable status bar translucency (requires API 19)
+        window.attributes.flags = window.attributes.flags and WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS.inv()
+    }
+}
+
+fun Controller.setTranslucentStatusbar(translucent: Boolean) {
+    activity.setTranslucentStatusbar(translucent)
+}
+
+
 
