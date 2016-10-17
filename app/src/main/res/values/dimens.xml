@@ -4,8 +4,12 @@
     <dimen name="small">8dp</dimen>
     <dimen name="normal">16dp</dimen>
     <dimen name="large">32dp</dimen>
+    <dimen name="empty">0dp</dimen>
 
     <dimen name="default_elevation">8dp</dimen>
+    <dimen name="divider_size">1dp</dimen>
+    <dimen name="divider_margin">72dp</dimen>
+
 
     <dimen name="material_drawer_sticky_footer_elevation">0dp</dimen>
     <!-- Default screen margins, per the Android Design guidelines. -->

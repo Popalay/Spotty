@@ -12,7 +12,7 @@ import com.popalay.spotty.utils.extensions.toUri
 import kotlinx.android.synthetic.main.item_spot.view.*
 import java.util.*
 
-class SpotAdapter : UltimateAdapter<ViewHolder>() {
+class SpotsAdapter : UltimateAdapter<ViewHolder>() {
 
     var items: MutableList<Spot> = ArrayList()
 

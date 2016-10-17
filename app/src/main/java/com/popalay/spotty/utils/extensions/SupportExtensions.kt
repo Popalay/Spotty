@@ -150,5 +150,7 @@ fun Controller.setTranslucentStatusbar(translucent: Boolean) {
     activity.setTranslucentStatusbar(translucent)
 }
 
+fun CharSequence.trimInString() = this.trim().toString()
+
 
 

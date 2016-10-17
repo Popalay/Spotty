@@ -4,7 +4,7 @@ import com.popalay.spotty.ui.addspot.AddSpotController
 import com.popalay.spotty.ui.addspot.AddSpotPresenter
 import com.popalay.spotty.ui.dashboard.DashboardPresenter
 import com.popalay.spotty.ui.splash.SplashPresenter
-import com.popalay.spotty.ui.splash.SpotDetailsPresenter
+import com.popalay.spotty.ui.spotdetails.SpotDetailsPresenter
 import com.popalay.spotty.ui.spotsmap.SpotsMapPresenter
 import dagger.Component
 import javax.inject.Singleton

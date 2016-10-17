@@ -6,7 +6,7 @@ import android.view.*
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.popalay.spotty.R
-import com.popalay.spotty.adapters.SpotAdapter
+import com.popalay.spotty.adapters.SpotsAdapter
 import com.popalay.spotty.models.Spot
 import com.popalay.spotty.ui.addspot.AddSpotController
 import com.popalay.spotty.ui.base.BaseLceController
@@ -21,7 +21,7 @@ class DashboardController : DashboardView, BaseLceController<RecyclerView, List<
     private val MENU_ADD: Int = Menu.FIRST
     private val MENU_SEARCH: Int = MENU_ADD + 1
 
-    private val spotAdapter: SpotAdapter = SpotAdapter()
+    private val spotAdapter: SpotsAdapter = SpotsAdapter()
 
     init {
         setHasOptionsMenu(true)
@@ -84,7 +84,7 @@ class DashboardController : DashboardView, BaseLceController<RecyclerView, List<
     }
 
     override fun openSpot(spot: Spot) {
-        parentController.router.pushController(RouterTransaction.with(SpotDetailsController(spot))
+        parentController.router.pushController(RouterTransaction.with(SpotDetailsController(spot.id))
                 .popChangeHandler(VerticalChangeHandler())
                 .pushChangeHandler(VerticalChangeHandler()))
     }

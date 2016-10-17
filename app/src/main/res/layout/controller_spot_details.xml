@@ -11,7 +11,8 @@
         android:fitsSystemWindows="true"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <android.support.design.widget.CollapsingToolbarLayout
+        <com.muzakki.ahmad.widget.CollapsingToolbarLayout
+            android:id="@+id/collapsingToolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:contentScrim="?attr/colorPrimary"
@@ -45,10 +46,9 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <ScrollView
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/windowBackground"
         android:scrollbars="none"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
@@ -64,27 +64,103 @@
                 android:layout_marginBottom="@dimen/small"
                 app:contentPadding="@dimen/normal">
 
+                <TextView
+                    android:id="@+id/description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                    tools:text="ddsfsfsfsfsfsf" />
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/mapContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/small" />
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/small"
+                app:contentPadding="@dimen/normal">
+
+                <com.facebook.drawee.view.SimpleDraweeView
+                    android:id="@+id/authorProfileImage"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    app:roundAsCircle="true"
+                    app:roundingBorderColor="@color/windowBackground"
+                    app:roundingBorderWidth="1dp"
+                    tools:background="@color/accent" />
+
+                <TextView
+                    android:id="@+id/authorName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="72dp"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                    tools:text="ddsfsfsfsfsfsf" />
+
+            </android.support.v7.widget.CardView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/small"
+                android:text="@string/comments"
+                android:textAllCaps="true"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead" />
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/small">
+
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-                    <com.facebook.drawee.view.SimpleDraweeView
-                        android:id="@+id/authorProfileImage"
-                        android:layout_width="56dp"
-                        android:layout_height="56dp"
-                        android:layout_marginEnd="@dimen/normal"
-                        app:roundAsCircle="true"
-                        app:roundingBorderColor="@color/windowBackground"
-                        app:roundingBorderWidth="1dp"
-                        tools:background="@color/accent" />
-
-                    <TextView
-                        android:id="@+id/authorName"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-                        tools:text="ddsfsfsfsfsfsf" />
+                        android:padding="@dimen/normal">
+
+                        <EditText
+                            android:id="@+id/commentText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/small"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:hint="@string/write_comment" />
+
+                        <ImageView
+                            android:id="@+id/sendComment"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end|center_vertical"
+                            android:layout_weight="0"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:clickable="true"
+                            android:src="@drawable/ic_send" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/divider_size"
+                        android:background="@color/divider" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/commentsList"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
 
                 </LinearLayout>
 
@@ -92,6 +168,6 @@
 
         </LinearLayout>
 
-    </ScrollView>
+    </android.support.v4.widget.NestedScrollView>
 
 </android.support.design.widget.CoordinatorLayout>

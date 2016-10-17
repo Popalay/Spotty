@@ -16,6 +16,10 @@ internal class PhotosPagerAdapter(val photos: List<String>) : PagerAdapter() {
         return view
     }
 
+    override fun destroyItem(container: ViewGroup, position: Int, `object`: Any?) {
+        container.removeView(`object` as View)
+    }
+
     override fun isViewFromObject(view: View, item: Any) = view == item
 
     override fun getCount() = photos.size

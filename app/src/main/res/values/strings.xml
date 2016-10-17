@@ -20,4 +20,6 @@
     <string name="gallery">Gallery</string>
     <string name="pick_from">Pick from…</string>
     <string name="pick_up_to_4_photos">Pick up to 4 photos</string>
+    <string name="comments">Comments</string>
+    <string name="write_comment">Write a comment</string>
 </resources>

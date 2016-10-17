@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="@dimen/small"
+    android:paddingEnd="@dimen/normal"
+    android:paddingStart="@dimen/normal"
+    android:paddingTop="@dimen/small">
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/authorProfileImage"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_marginEnd="@dimen/normal"
+        app:roundAsCircle="true"
+        app:roundingBorderColor="@color/windowBackground"
+        app:roundingBorderWidth="1dp"
+        tools:background="@color/accent" />
+
+    <TextView
+        android:id="@+id/comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+        tools:text="ddsfsfsfsfsfsf" />
+
+</LinearLayout>

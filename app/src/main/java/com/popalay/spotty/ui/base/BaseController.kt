@@ -37,6 +37,14 @@ abstract class BaseController<V : MvpView, P : MvpPresenter<V>>() : MvpControlle
         getBaseActivity().supportActionBar?.setTitle(title)
     }
 
+    protected fun setSubTitle(title: String) {
+        getBaseActivity().supportActionBar?.subtitle = title
+    }
+
+    protected fun setSubTitle(@StringRes title: Int) {
+        getBaseActivity().supportActionBar?.setSubtitle(title)
+    }
+
     protected abstract fun inflateView(inflater: LayoutInflater, container: ViewGroup): View
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {

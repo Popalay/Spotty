@@ -18,4 +18,7 @@ data class Position(val latitude: Double = 0.0, val longitude: Double = 0.0) {
     fun toLatLng() = LatLng(latitude, longitude)
 }
 
-data class Counts(var likes: Int = 0, var comments: Int = 0)
+data class Counts(var likes: Int = 0,
+                  var comments: Int = 0
+)
+
