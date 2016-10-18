@@ -1,13 +1,14 @@
 package com.popalay.spotty.adapters
 
+import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.popalay.spotty.R
 import com.popalay.spotty.models.UiComment
+import com.popalay.spotty.utils.ui.StickyHeaderAdapter
 import kotlinx.android.synthetic.main.item_comment.view.*
 import java.util.*
 
-class CommentsAdapter : UltimateAdapter<ViewHolder>() {
-
+class CommentsAdapter : UltimateAdapter<ViewHolder>(), UltimateAdapter.HeaderInterface, StickyHeaderAdapter {
     var items: MutableList<UiComment> = ArrayList()
 
     override fun clear() {
@@ -33,4 +34,16 @@ class CommentsAdapter : UltimateAdapter<ViewHolder>() {
         }
     }
 
+    override fun getHeaderVH(v: View): HeaderVH {
+        return HeaderViewHolder(v)
+    }
+
+    override fun getHeaderViewResId() = R.layout.header_comments
+
+    override fun bindHeaderVH(vh: RecyclerView.ViewHolder) {
+    }
+
+    override fun getHeaderId(position: Int): Long {
+        return getDataSize() / 3L
+    }
 }

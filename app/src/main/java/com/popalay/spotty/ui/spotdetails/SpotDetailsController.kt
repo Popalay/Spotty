@@ -18,9 +18,10 @@ import com.popalay.spotty.models.User
 import com.popalay.spotty.ui.base.BaseController
 import com.popalay.spotty.utils.extensions.inflate
 import com.popalay.spotty.utils.extensions.toPx
-import com.popalay.spotty.utils.extensions.trimInString
+import com.popalay.spotty.utils.ui.StickyHeaderDecoration
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration
 import kotlinx.android.synthetic.main.controller_spot_details.view.*
+import kotlinx.android.synthetic.main.header_comments.view.*
 
 
 class SpotDetailsController() : SpotDetailsView, BaseController<SpotDetailsView, SpotDetailsPresenter>() {
@@ -50,9 +51,9 @@ class SpotDetailsController() : SpotDetailsView, BaseController<SpotDetailsView,
             toolbar.setNavigationOnClickListener {
                 router.popCurrentController()
             }
-            sendComment.setOnClickListener {
-                presenter.saveComment(commentText.text.trimInString())
-            }
+            /*          sendComment.setOnClickListener {
+                          presenter.saveComment(commentText.text.trimInString())
+                      }*/
         }
     }
 
@@ -61,7 +62,6 @@ class SpotDetailsController() : SpotDetailsView, BaseController<SpotDetailsView,
         setMap(spot.position.toLatLng())
         with(view) {
             collapsingToolbar.title = spot.title
-            collapsingToolbar.subtittle = spot.placeName
             photos_pager.adapter = adapter
             indicator.setViewPager(photos_pager)
             description.text = spot.description
@@ -101,11 +101,14 @@ class SpotDetailsController() : SpotDetailsView, BaseController<SpotDetailsView,
     override fun setComments(comments: List<UiComment>) {
         val commentsAdapter = CommentsAdapter()
         commentsAdapter.items = comments.toMutableList()
-        view.commentsList.adapter = commentsAdapter
-        view.commentsList.addItemDecoration(HorizontalDividerItemDecoration.Builder(activity)
-                .sizeResId(R.dimen.divider_size)
-                .colorResId(R.color.divider)
-                .marginResId(R.dimen.divider_margin, R.dimen.normal)
-                .build())
+        with(view) {
+            commentsList.adapter = commentsAdapter
+            commentsList.addItemDecoration(HorizontalDividerItemDecoration.Builder(activity)
+                    .sizeResId(R.dimen.divider_size)
+                    .colorResId(R.color.divider)
+                    .marginResId(R.dimen.divider_margin, R.dimen.normal)
+                    .build())
+            commentsList.addItemDecoration(StickyHeaderDecoration(commentsAdapter))
+        }
     }
 }

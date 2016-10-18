@@ -54,6 +54,7 @@ kapt {
 repositories {
     mavenCentral()
     maven { url "https://jitpack.io" }
+    jcenter()
 }
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -102,7 +103,7 @@ dependencies {
     kapt 'com.google.dagger:dagger-compiler:2.7'
     provided 'org.glassfish:javax.annotation:10.0-b28'
 
-    //auth
+    //vk
     compile 'com.vk:androidsdk:1.6.5'
 
     //play services
@@ -117,7 +118,6 @@ dependencies {
     compile 'com.github.ybq:parallaxviewpager:2.0.0'
     compile 'com.eftimoff:android-viewpager-transformers:1.0.1@aar'
     compile 'com.pacioianu.david:ink-page-indicator:1.2.0'
-    compile 'com.github.ahmadmuzakki29:subtitle-collapsingtoolbar:fcfa0102d0'
 
     //utils
     compile 'com.squareup.picasso:picasso:2.5.2'

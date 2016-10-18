@@ -186,8 +186,8 @@ abstract class UltimateAdapter<T : RecyclerView.ViewHolder> : RecyclerView.Adapt
     }
 
     companion object {
-        val HEADER_TYPE_ID = -1
-        val FOOTER_TYPE_ID = -2
+        @JvmStatic val HEADER_TYPE_ID = -1
+        @JvmStatic val FOOTER_TYPE_ID = -2
     }
 
 }
