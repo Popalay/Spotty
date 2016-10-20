@@ -10,7 +10,7 @@
     android:paddingTop="@dimen/small">
 
     <com.facebook.drawee.view.SimpleDraweeView
-        android:id="@+id/authorProfileImage"
+        android:id="@+id/commentAuthorProfileImage"
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:layout_marginEnd="@dimen/normal"

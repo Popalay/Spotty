@@ -24,7 +24,7 @@ class DataManager(val firebaseAuth: FirebaseAuth, val firebaseDb: FirebaseDataba
     fun isLogged() = firebaseAuth.currentUser != null
 
     fun saveSpot(spot: Spot, photos: MutableList<Uri>): Observable<Boolean> {
-        val reference = firebaseDb.reference.child("spot").push()
+        val reference = firebaseDb.reference.child("fullSpotDetails").push()
         spot.authorId = firebaseAuth.currentUser?.uid.orEmpty()
         spot.id = reference.key
 
@@ -82,7 +82,7 @@ class DataManager(val firebaseAuth: FirebaseAuth, val firebaseDb: FirebaseDataba
 
     fun saveComment(spotId: String, comment: Comment) {
         val reference = firebaseDb.reference.child("comment").child(spotId).push()
-        reference.setPriority(-System.currentTimeMillis())
+        reference.setPriority(System.currentTimeMillis())
         reference.setValue(comment)
     }
 

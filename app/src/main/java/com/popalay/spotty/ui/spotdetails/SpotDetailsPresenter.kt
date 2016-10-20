@@ -3,8 +3,8 @@ package com.popalay.spotty.ui.spotdetails
 import com.popalay.spotty.App
 import com.popalay.spotty.data.DataManager
 import com.popalay.spotty.models.Comment
-import com.popalay.spotty.models.Spot
-import com.popalay.spotty.models.UiComment
+import com.popalay.spotty.models.CommentUI
+import com.popalay.spotty.models.FullSpotDetails
 import com.popalay.spotty.ui.base.presenter.RxPresenter
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
@@ -15,7 +15,7 @@ class SpotDetailsPresenter(val spotId: String) : RxPresenter<SpotDetailsView>() 
 
     @Inject lateinit var dataManager: DataManager
 
-    private lateinit var spot: Spot
+    private lateinit var mFullSpotDetails: FullSpotDetails
 
     init {
         App.appComponent.inject(this)
@@ -28,9 +28,9 @@ class SpotDetailsPresenter(val spotId: String) : RxPresenter<SpotDetailsView>() 
 
     private fun getSpot() {
         dataManager.getSpot(spotId)
+                .flatMap({ dataManager.getUser(it.authorId) }, ::FullSpotDetails)
+                .doOnNext { mFullSpotDetails = it }
                 .doOnNext {
-                    spot = it
-                    getSpotAuthor()
                     getSpotComments()
                 }
                 .observeOn(AndroidSchedulers.mainThread())
@@ -41,19 +41,13 @@ class SpotDetailsPresenter(val spotId: String) : RxPresenter<SpotDetailsView>() 
         super.detachView(retainInstance)
     }
 
-    private fun getSpotAuthor() {
-        dataManager.getUser(spot.authorId)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { view?.setAuthor(it) }
-    }
-
     private fun getSpotComments() {
         dataManager.getComments(spotId)
                 .flatMap { Observable.from(it) }
                 .flatMap({ dataManager.getUser(it.authorId) }) { comment, user ->
-                    UiComment(user.profilePhoto.orEmpty(), comment.text)
+                    CommentUI(user.profilePhoto.orEmpty(), comment.text)
                 }
-                .take(spot.counts.comments)
+                .take(mFullSpotDetails.spot.counts.comments)
                 .toList()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { view?.setComments(it) }
@@ -61,11 +55,11 @@ class SpotDetailsPresenter(val spotId: String) : RxPresenter<SpotDetailsView>() 
 
     fun saveComment(text: String) {
         if (!text.isNullOrBlank()) {
-            spot.counts.comments++
+            mFullSpotDetails.spot.counts.comments++
             dataManager.getCurrentUser()
-                    .doOnNext { dataManager.updateSpot(spot) }
+                    .doOnNext { dataManager.updateSpot(mFullSpotDetails.spot) }
                     .map { Comment(it.id.orEmpty(), text) }
-                    .doOnNext { dataManager.saveComment(spot.id, it) }
+                    .doOnNext { dataManager.saveComment(mFullSpotDetails.spot.id, it) }
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe {
                         view?.showMessage("Comment has been saved")

@@ -1,17 +1,14 @@
 package com.popalay.spotty.ui.spotdetails
 
 import com.hannesdorfmann.mosby.mvp.MvpView
-import com.popalay.spotty.models.Comment
-import com.popalay.spotty.models.Spot
-import com.popalay.spotty.models.UiComment
-import com.popalay.spotty.models.User
+import com.popalay.spotty.models.CommentUI
+import com.popalay.spotty.models.FullSpotDetails
 
 
 interface SpotDetailsView : MvpView {
 
-    fun setBaseInfo(spot: Spot)
-    fun setAuthor(user: User)
+    fun setBaseInfo(fullSpotDetails: FullSpotDetails)
     fun onCommentSaved()
     fun showMessage(text: String)
-    fun setComments(comments: List<UiComment>)
+    fun setComments(comments: List<CommentUI>)
 }

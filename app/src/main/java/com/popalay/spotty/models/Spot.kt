@@ -22,3 +22,6 @@ data class Counts(var likes: Int = 0,
                   var comments: Int = 0
 )
 
+data class FullSpotDetails(val spot: Spot,
+                           val author: User
+)

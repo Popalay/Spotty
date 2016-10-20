@@ -7,8 +7,6 @@ import android.support.v4.view.ViewCompat
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
-import com.pawegio.kandroid.d
-
 import com.popalay.spotty.adapters.UltimateAdapter
 
 
@@ -32,7 +30,6 @@ class StickyHeaderDecoration(val mAdapter: StickyHeaderAdapter, val mRenderInlin
         if (position != RecyclerView.NO_POSITION
                 && hasHeader(position)
                 && showHeaderAboveItem(position)) {
-            d(position.toString())
             val header = getHeader(parent, position).itemView
             headerHeight = getHeaderHeightForLayout(header)
         }
@@ -41,7 +38,7 @@ class StickyHeaderDecoration(val mAdapter: StickyHeaderAdapter, val mRenderInlin
     }
 
     private fun showHeaderAboveItem(itemAdapterPosition: Int): Boolean {
-        return itemAdapterPosition == 0 || mAdapter.getHeaderId(itemAdapterPosition - 1) != mAdapter.getHeaderId(itemAdapterPosition)
+        return itemAdapterPosition == 1 || mAdapter.getHeaderId(itemAdapterPosition - 1) != mAdapter.getHeaderId(itemAdapterPosition)
     }
 
     /**
@@ -79,11 +76,11 @@ class StickyHeaderDecoration(val mAdapter: StickyHeaderAdapter, val mRenderInlin
         if (mHeaderCache.get(key) != null) {
             return mHeaderCache.get(key)
         } else {
-            val holder = (mAdapter as UltimateAdapter<*>).createViewHolder(parent, UltimateAdapter.HEADER_TYPE_ID)
+            val holder = mAdapter.createStickyHeaderViewHolder(parent, UltimateAdapter.HEADER_TYPE_ID)
             val header = holder.itemView
 
             //noinspection unchecked
-            mAdapter.onBindViewHolder(holder, position)
+            mAdapter.bindStickyHeaderViewHolder(holder, position)
 
             val widthSpec = View.MeasureSpec.makeMeasureSpec(parent.measuredWidth,
                     View.MeasureSpec.EXACTLY)
