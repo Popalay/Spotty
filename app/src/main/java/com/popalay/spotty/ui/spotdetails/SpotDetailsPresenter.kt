@@ -30,9 +30,7 @@ class SpotDetailsPresenter(val spotId: String) : RxPresenter<SpotDetailsView>() 
         dataManager.getSpot(spotId)
                 .flatMap({ dataManager.getUser(it.authorId) }, ::FullSpotDetails)
                 .doOnNext { mFullSpotDetails = it }
-                .doOnNext {
-                    getSpotComments()
-                }
+                .doOnNext { getSpotComments() }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { view?.setBaseInfo(it) }
     }
